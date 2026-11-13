@@ -90,4 +90,4 @@ Code: MIT License (see [`LICENSE`](LICENSE)). Data remain under the terms of the
 
 ## 📬 Author
 
-*[Your Name]* — *[your email / LinkedIn]*
+*[Atta Albert]* — *[albertsecurx@gmail.com]*
