@@ -1,6 +1,0 @@
-scenario,flood_days_per_yr,excess_m3_per_yr,runoff_coeff,flood_days_reduction_%,volume_reduction_%
-Business as usual,0.55,301038.622,0.333,0.0,0.0
-Green roofs,0.45,267341.065,0.304,18.182,11.194
-Rain gardens + permeable paving,0.35,206821.792,0.29,36.364,31.297
-Drain upgrade (grey only),0.3,198397.043,0.333,45.455,34.096
-Integrated green + grey,0.15,117534.271,0.261,72.727,60.957
