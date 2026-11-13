@@ -1,0 +1,75 @@
+# =====================================================================
+#  Study configuration — change these values to study a different city
+# =====================================================================
+
+study_area:
+  name: "Lagos Metropolitan Area, Nigeria"
+  latitude: 6.5244        # decimal degrees (North = positive)
+  longitude: 3.3792       # decimal degrees (East = positive)
+
+period:
+  start_year: 2005
+  end_year: 2024
+
+data:
+  # Where the daily rainfall comes from:
+  #   nasa_power  -> NASA POWER satellite/reanalysis product (PRECTOTCORR), free, no key
+  #   open_meteo  -> Open-Meteo historical archive (ERA5 reanalysis), free, no key
+  #   csv         -> your own file, e.g. NiMet rain-gauge data (columns: date, precip_mm)
+  source: nasa_power
+  csv_path: data/raw/station_rainfall.csv
+  wet_day_threshold_mm: 1.0      # WMO/ETCCDI definition of a "wet day"
+  max_missing_fraction: 0.10     # a year with more missing days than this is excluded
+
+statistics:
+  significance_level: 0.05
+  return_periods_years: [2, 5, 10, 25, 50, 100]
+
+# ---------------------------------------------------------------------
+#  Project 2 — urban hydrology settings
+# ---------------------------------------------------------------------
+urban:
+  catchment_area_km2: 25.0         # size of the urban drainage catchment being modelled
+  pervious_curve_number: 74        # SCS CN for open soil/grass (hydrologic soil group C, fair condition)
+  impervious_curve_number: 98      # SCS CN for roofs, roads and paved areas
+  initial_abstraction_ratio: 0.2   # lambda in Ia = lambda * S (standard SCS value)
+  drainage_capacity_mm_per_day: 40 # runoff depth the drains can evacuate in a day
+  use_antecedent_moisture: true    # adjust CN for wet/dry soil (AMC I / II / III)
+
+  # Impervious (built-up) fraction of the catchment by year.
+  # !!! THESE ARE PLACEHOLDER ASSUMPTIONS !!!
+  # Replace them with values you measure using tools/gee_impervious_ghsl.js
+  # (GHSL built-up surface, available in 5-year epochs). Years in between are interpolated.
+  impervious_fraction_by_year:
+    2005: 0.45
+    2010: 0.49
+    2015: 0.53
+    2020: 0.57
+    2024: 0.60
+
+# Nature-based and engineering ("grey") flood-reduction scenarios tested in Project 2.
+#   disconnected_impervious: share of the impervious area whose runoff is redirected into
+#                            green roofs / rain gardens / permeable paving (acts as pervious)
+#   extra_storage_mm:        additional storage depth per day (detention ponds, rain tanks)
+#   capacity_multiplier:     scaling of drainage capacity (1.25 = drains upgraded by 25%)
+suds_scenarios:
+  - name: "Business as usual"
+    disconnected_impervious: 0.00
+    extra_storage_mm: 0
+    capacity_multiplier: 1.00
+  - name: "Green roofs"
+    disconnected_impervious: 0.10
+    extra_storage_mm: 0
+    capacity_multiplier: 1.00
+  - name: "Rain gardens + permeable paving"
+    disconnected_impervious: 0.15
+    extra_storage_mm: 5
+    capacity_multiplier: 1.00
+  - name: "Drain upgrade (grey only)"
+    disconnected_impervious: 0.00
+    extra_storage_mm: 0
+    capacity_multiplier: 1.25
+  - name: "Integrated green + grey"
+    disconnected_impervious: 0.25
+    extra_storage_mm: 10
+    capacity_multiplier: 1.25
