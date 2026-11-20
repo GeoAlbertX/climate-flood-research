@@ -20,7 +20,7 @@ The [literature review](LITERATURE_REVIEW.md) found three problems with the exis
 2. **Most are snapshots.** Published work compares two or three dates with different class definitions, and several studies report no accuracy assessment.
 3. **The flood link is assumed, not measured.** No study converts lost wetland area into lost flood-storage volume, and the feedback loop in which flooding drives more land filling is known only from residents' accounts.
 
-This project builds on [Project 2](../project2_urban_flood_risk/README.md). Satellite measurements there showed that central Lagos was already built up by 2005, so the city's recent growth must have happened on its edges, often on wetland and lagoon fringe. Project 3 maps where that growth went, and what it removed.
+This project builds on [Project 2](../project2_urban_flood_risk/README.md). Satellite measurements there showed that central Lagos was already built up by 2005, while built-up land in the Lekki–Ajah corridor rose from 16 % to 26 % and raised runoff there by about a third. Much of that edge growth is on wetland and lagoon fringe. Project 3 maps where the growth went across Lagos, and what it removed.
 
 ## Research questions
 

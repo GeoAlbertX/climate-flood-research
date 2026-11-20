@@ -8,7 +8,7 @@ Atta Albert · Independent research project · Python, SCS Curve Number hydrolog
 
 ## Abstract
 
-Urban floods happen when more water reaches the ground surface than the soil can absorb and the drains can carry away. Two things increase that water: **heavier rain** (climate) and **more concrete** (urbanisation), because roofs and roads stop rain from soaking in. This project builds a transparent rainfall–runoff model for a 25 km² urban catchment in Lagos using the **USDA SCS Curve Number** method, driven by 20 years of observed daily rainfall (2005–2024) and a growing impervious (built-up) surface fraction measured from the **Global Human Settlement Layer (GHSL)**. It (1) quantifies the trend in "drainage-overload days" and flood volume using **Mann-Kendall**, **Sen's slope** and **Poisson regression**; (2) **separates** how much of the change is caused by rainfall change versus urban growth, using a counterfactual model run; (3) compares five planning strategies — green roofs, rain gardens and permeable paving, drain upgrades, and an integrated green–grey approach; and (4) tests how sensitive the conclusions are to the model's assumptions. Results are in [`results/RESULTS.md`](results/RESULTS.md).
+Urban floods happen when more water reaches the ground surface than the soil can absorb and the drains can carry away. Two things increase that water: **heavier rain** (climate) and **more concrete** (urbanisation), because roofs and roads stop rain from soaking in. This project builds a transparent rainfall–runoff model using the **USDA SCS Curve Number** method and applies it to two contrasting areas of Lagos of about 24 km² each: **central Lagos**, which was already densely built by 2005, and the **Lekki–Ajah corridor**, one of the fastest-growing parts of the city. Both are driven by the same 20 years of observed daily rainfall (2005–2024), and by built-up surface fractions measured from the **Global Human Settlement Layer (GHSL)**, so the difference between them isolates the effect of urban growth. It (1) quantifies the trend in "drainage-overload days" and flood volume using **Mann-Kendall**, **Sen's slope** and **Poisson regression**; (2) **separates** how much of the change is caused by rainfall change versus urban growth, using a counterfactual model run; (3) compares five planning strategies — green roofs, rain gardens and permeable paving, drain upgrades, and an integrated green–grey approach; and (4) tests how sensitive the conclusions are to the model's assumptions. The side-by-side results are in [`CATCHMENT_COMPARISON.md`](CATCHMENT_COMPARISON.md), with full details for [central Lagos](results/RESULTS.md) and [Lekki–Ajah](results_lekki_ajah/RESULTS.md).
 
 In simple terms, the model takes each day's rain over part of Lagos and works out how much of it runs off the streets. I used it to ask three things: are floods becoming more frequent, is that because of the rain or because more of the city is paved, and which solutions (green, concrete or both) would reduce flooding the most?
 
@@ -41,7 +41,14 @@ This work connects to **UN Sustainable Development Goal 11** (sustainable cities
 | Soil / land-cover runoff parameters | SCS Curve Number tables (USDA NRCS TR-55, 1986) | CN = 98 impervious; CN = 74 open land, soil group C |
 | Recorded flood events *(optional)* | News archives, NEMA/LASEMA reports, Dartmouth Flood Observatory, EM-DAT | Enter in [`data/flood_events.csv`](../data/flood_events.csv) |
 
-**Built-up data:** the impervious fractions in `config.yaml` were measured from GHSL with the Earth Engine script: 54.7 % in 2005, 54.8 % in 2010, 54.9 % in 2015, 55.0 % in 2020 and 55.0 % in 2025 (used for 2024).
+**Study areas and built-up data.** Each study area is a circle of 25 km² from which permanent water (JRC Global Surface Water) is removed, leaving the land area below. The built-up share of that land was measured from GHSL with the Earth Engine script:
+
+| Area | Centre | Land area | 2005 | 2010 | 2015 | 2020 | 2025 |
+|---|---|---|---|---|---|---|---|
+| Central Lagos | 6.524° N, 3.379° E | 23.8 km² | 56.5 % | 56.6 % | 56.7 % | 56.8 % | 56.8 % |
+| Lekki–Ajah corridor | 6.445° N, 3.545° E | 23.6 km² | 15.9 % | 19.4 % | 23.4 % | 25.7 % | 26.0 % |
+
+The 2025 value is used for 2024. Both areas use the same rainfall, soil and drainage settings, so any difference between them comes from land use.
 
 ## 4. Methodology
 
@@ -215,7 +222,18 @@ where $d_i$ is the difference in rank of year $i$ between the two series.
 
 ## 5. Results
 
-All numbers, tables and figures are in [`results/RESULTS.md`](results/RESULTS.md).
+The main comparison is in [`CATCHMENT_COMPARISON.md`](CATCHMENT_COMPARISON.md):
+
+| | Central Lagos | Lekki–Ajah corridor |
+|---|---|---|
+| Built-up share of land, 2005 → 2024 | 56.5 % → 56.8 % | 15.9 % → 26.0 % |
+| Change in the share of rain that runs off | +3.7 % (p = 0.67) | **+32.4 % (p = 0.048)** |
+| Same, with land use frozen at 2005 | +3.2 % (p = 0.72) | −7.0 % (p = 0.77) |
+| Change in annual runoff between decades | about 0 mm | **+44 mm, all from urban growth** |
+| Share of the extra flood volume due to urban growth | 1 % | 22 % |
+| Flood volume cut by integrated green + grey drainage | 60 % | 49 % |
+
+Full tables and figures for each area: [central Lagos](results/RESULTS.md), [Lekki–Ajah](results_lekki_ajah/RESULTS.md). Each folder contains:
 
 | Figure | What it shows |
 |---|---|
@@ -228,20 +246,25 @@ All numbers, tables and figures are in [`results/RESULTS.md`](results/RESULTS.md
 
 ## 6. Discussion
 
-**Which driver dominates?** In this catchment, rainfall. The GHSL measurements show that central Lagos was already about 55 % built-up in 2005 and has barely changed since (54.7 % to 55.0 %). With so little new building, the model attributes almost all of the change between the two decades to rainfall: the slight rise in flood days, and 99 % of the extra flood volume. The runoff coefficient shows no significant trend (+3.8 %, p = 0.77). That fits Project 1, where the heaviest storms appear to have intensified while annual totals did not.
+**Which driver dominates? It depends on where you look.** Central Lagos was already 56.5 % built-up in 2005 and has hardly changed since. There, the model attributes almost all of the change between the two decades to rainfall (99 % of the extra flood volume), and the share of rain that runs off shows no trend. That fits Project 1, where the heaviest storms appear to have intensified while annual totals did not.
 
-This does not mean urbanisation is unimportant for Lagos flooding. It means the urban growth of the last twenty years happened somewhere else: on the city's edges in Lekki, Ajah, Ikorodu and around the lagoon, often on wetland. A central catchment is the wrong place to look for its effect, which is the question taken up by the [wetland and reclamation study](https://github.com/GeoAlbertX/lagos-wetland-reclamation). An earlier version of this analysis used assumed built-up values (45 % rising to 60 %) and found a strong urban effect. Replacing them with satellite measurements removed it, which shows how much the conclusions depend on measured rather than assumed land cover.
+The Lekki–Ajah corridor tells a different story. Its built-up share rose from 15.9 % to 26.0 % of the land, an increase of almost two thirds in twenty years. Under exactly the same rain, the share that runs off rose by 32 % (Mann-Kendall p = 0.048; linear regression p = 0.035; the 95 % confidence interval of the Sen's slope stays above zero). With land use frozen at 2005, the same rainfall gives no increase at all (−7 %, p = 0.77), so the whole rise of about 44 mm of runoff a year comes from new building. In short, rainfall decides how much flooding varies from year to year, but where the city is still growing, development steadily adds water to every storm.
 
-**Green versus grey.** Upgrading the drains alone reduced flood volume by about a third, similar to rain gardens with permeable paving. The two approaches work differently, though. Bigger drains move the same water downstream faster, which can shift the problem to the lagoon and to low-lying neighbourhoods. Green measures reduce the volume at source and bring other benefits, such as cooling, habitat and water reuse. Only the scenarios that included green infrastructure lowered the runoff coefficient. The integrated scenario performed best by a wide margin, which suggests the two approaches complement each other rather than compete.
+This result needs careful reading. In a Curve Number model, runoff responds to built-up area by design, so the model does not independently prove that building causes runoff, which is well established. What it shows is the *size* of the effect: in Lekki–Ajah, the land-use change is large enough to stand out clearly from twenty years of natural rainfall variation, while in central Lagos it is not. The p-value is also close to the 0.05 threshold, so the trend should be described as significant but modest in strength.
+
+An earlier version of this analysis used assumed built-up values for central Lagos (45 % rising to 60 %) and found a strong urban effect there. Replacing them with satellite measurements removed it and moved the question to the city's edges, which shows how much the conclusions depend on measured rather than assumed land cover. Much of that edge growth is on former wetland, which is the focus of the [wetland and reclamation study](https://github.com/GeoAlbertX/lagos-wetland-reclamation).
+
+**Green versus grey.** In central Lagos, upgrading the drains alone reduced flood volume by about a third, similar to rain gardens with permeable paving. In Lekki–Ajah, where less land is paved, every option has a smaller effect, and green roofs alone barely help (3 %), because there are fewer roofs to green. The two approaches work differently, though. Bigger drains move the same water downstream faster, which can shift the problem to the lagoon and to low-lying neighbourhoods. Green measures reduce the volume at source and bring other benefits, such as cooling, habitat and water reuse. Only the scenarios that included green infrastructure lowered the runoff coefficient. The integrated scenario performed best by a wide margin, which suggests the two approaches complement each other rather than compete.
 
 **Planning implications.** For Lagos, this points to a mix of policies: limits on impervious cover in new developments, required on-site retention (rain tanks, soakaways, permeable paving), protection of the remaining wetlands and floodplains, enforcement of drainage setbacks, and regular clearing of existing drains.
 
-**Uncertainty.** Drainage capacity is the parameter the results depend on most. A 20 % change moves the average from 0.30 to 0.90 flood days a year. Because the model produces only about nine flood days in 20 years, the exact flood-day percentages should be read with caution. GHSL built-up surface also leaves out many roads and paved yards, so the true impervious share is probably higher than 55 %; raising it by 10 % increases flood days from 0.45 to 0.55 a year.
+**Uncertainty.** Drainage capacity is the parameter the results depend on most: in central Lagos a 20 % change moves the average from 0.35 to 1.00 flood days a year. Because the model produces very few flood days (about nine in 20 years in central Lagos and five in Lekki–Ajah), flood-day results should be read with caution; the runoff results are the more robust part of the analysis. GHSL built-up surface also leaves out many roads and paved yards, so the true impervious share is probably higher than measured.
 
 ## 7. Limitations
 
 * **Daily time step:** urban flash floods happen within hours; a daily model captures *volumes* but not peak timing. An hourly model (e.g. EPA SWMM) is the natural next step.
-* **Lumped catchment:** the 25 km² area is treated as one unit; real flooding depends on topography, blocked drains and tides (backwater from the Lagos Lagoon).
+* **Lumped catchments:** each study area is treated as one unit; real flooding depends on topography, blocked drains and tides (backwater from the Lagos Lagoon). The circles are not real drainage catchments.
+* **Same soils everywhere:** both areas use the same Curve Numbers so that only land use differs. In reality the Lekki peninsula has sandier soils but a very high water table, which this model does not represent.
 * **Drainage capacity** is a single assumed value — in reality it varies and is reduced by solid-waste blockage.
 * **Built-up ≠ impervious:** GHSL built-up surface underestimates roads and paved yards.
 * **SCS-CN** was developed for US agricultural catchments; it is widely used but should be calibrated locally where gauge data exist.
@@ -249,17 +272,17 @@ This does not mean urbanisation is unimportant for Lagos flooding. It means the 
 
 ## 8. Conclusions and recommendations
 
-These conclusions use built-up fractions measured from GHSL for a 25 km² catchment around central Lagos (54.7 % in 2005, 55.0 % in 2025).
+These conclusions use built-up fractions measured from GHSL for two areas of about 24 km² of land each.
 
-1. **Central Lagos was already built up by 2005, so urban growth explains little of the recent change there.** With land use almost constant, the runoff coefficient shows no significant trend (+3.8 %, p = 0.77), and rainfall accounts for 99 % of the increase in flood volume between the two decades.
-2. **Flood days are rare in this model and their trend is not significant.** With 40 mm/day drainage capacity, the catchment overloads on average 0.45 days per year (about nine days in 20 years). Poisson regression gives +1.2 % per year (IRR = 1.012, 95 % CI 0.90–1.13, p = 0.84).
-3. **Integrated green + grey drainage works best.** Applied to the current city over 20 years of real rainfall, combining green infrastructure (25 % of paved area disconnected, 10 mm/day storage) with a 25 % drain upgrade cuts flood volume by **59 %** and flood days by 78 %. A drain upgrade alone gives 34 %, rain gardens with permeable paving 30 %, and green roofs alone 10 %. Only the strategies that include green infrastructure also lower the runoff coefficient, which reduces the water sent downstream to the lagoon.
-4. **Drainage capacity is the most important unknown.** Changing it by ±20 % moves average flood days from 0.30 to 0.90 per year, a larger effect than any other parameter. Measuring real drain capacity, including the effect of solid-waste blockage, is the highest priority for improving the model.
-5. **The effect of urban growth has to be studied where the growth happened.** Running the same model for a fast-growing peri-urban catchment (for example Lekki–Ajah or Ikorodu) is the natural next step.
+1. **Where Lagos is still growing, urban growth makes flooding worse.** In the Lekki–Ajah corridor, built-up land rose from 15.9 % to 26.0 %, and the share of rain that runs off rose by 32 % (p = 0.048). With land use frozen at 2005 there is no rise, so the extra 44 mm of runoff a year comes entirely from new development.
+2. **Where the city was already built, rainfall drives the change.** Central Lagos was 56.5 % built-up in 2005 and barely changed; there the runoff share shows no trend, and rainfall accounts for 99 % of the increase in flood volume between the two decades.
+3. **Flood days are rare in this model and their trends are not significant** in either area (central Lagos 0.45 a year, IRR = 1.012, p = 0.84; Lekki–Ajah 0.25 a year, IRR = 0.967, p = 0.67).
+4. **Integrated green + grey drainage works best in both areas.** Combining green infrastructure (25 % of paved area disconnected, 10 mm/day storage) with a 25 % drain upgrade cuts flood volume by **60 %** in central Lagos and **49 %** in Lekki–Ajah. In central Lagos a drain upgrade alone gives 34 %, rain gardens with permeable paving 31 % and green roofs alone 11 %. Only the strategies that include green infrastructure also lower the share of rain that runs off.
+5. **Drainage capacity is the most important unknown.** In central Lagos, changing it by ±20 % moves average flood days from 0.35 to 1.00 a year. Measuring real drain capacity, including the effect of solid-waste blockage, is the highest priority for improving the model.
 6. **Planning recommendations:**
    * Combine green and grey measures instead of relying on bigger drains alone: require on-site retention (rain tanks, soakaways, permeable paving) and upgrade key drains.
    * Keep existing drains clear: lost capacity from blockage has the biggest effect on flooding in this model.
-   * Control impervious cover and protect the remaining wetlands and floodplains on the growing edges of the city, where land-use change is still happening.
+   * Focus land-use control on the growing edges of the city, such as Lekki–Ajah: limit impervious cover in new developments, require on-site retention, and protect the remaining wetlands and floodplains, because that is where new building is still adding runoff.
    * Measure drain capacities and record actual flood events in `data/flood_events.csv` so the model can be validated.
 
 ## 9. How to reproduce

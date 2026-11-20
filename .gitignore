@@ -10,6 +10,7 @@ env/
 
 # Synthetic demo outputs (python run_all.py --demo) - never report these as findings
 results_demo/
+*_demo/
 
 # Editors / OS
 .vscode/

@@ -31,15 +31,25 @@ def fmt_p(p):
 
 
 def run(demo=False, cfg=None):
+    """Run the model for every catchment in config.yaml and write a comparison table."""
     cfg = cfg or load_config()
+    summaries = [run_catchment(demo, cfg, catch) for catch in cfg["catchments"].values()]
+    if not demo and len(summaries) > 1:
+        write_comparison(summaries, cfg)
+    return summaries
+
+
+def run_catchment(demo, cfg, catch):
     alpha = cfg["statistics"]["significance_level"]
-    u = cfg["urban"]
-    out = HERE / ("results_demo" if demo else "results")
+    # catchment-specific area and land use on top of the shared soil/drainage settings
+    u = {**cfg["urban"], "catchment_area_km2": catch["area_km2"],
+         "impervious_fraction_by_year": catch["impervious_fraction_by_year"]}
+    out = HERE / (catch["results_dir"] + ("_demo" if demo else ""))
     (out / "figures").mkdir(parents=True, exist_ok=True)
     (out / "tables").mkdir(parents=True, exist_ok=True)
     F = out / "figures"
 
-    print("PROJECT 2 — urban flood risk")
+    print(f"PROJECT 2 - urban flood risk: {catch['name']}")
     daily = load_rainfall(cfg, demo=demo)
     src = daily.attrs["source"]
     y0, y1 = cfg["period"]["start_year"], cfg["period"]["end_year"]
@@ -221,9 +231,10 @@ def run(demo=False, cfg=None):
     if demo:
         L += ["> **SYNTHETIC DEMO DATA — these numbers are NOT real and must not be reported.**", ""]
     L += [
-        f"# Project 2 Results — {cfg['study_area']['name']}, {y0}–{y1}",
+        f"# Project 2 Results — {catch['name']}, Lagos, {y0}–{y1}",
         "",
-        f"*Produced by `analysis.py`. Rainfall: {src}. Catchment {u['catchment_area_km2']} km², drainage capacity "
+        f"*Produced by `analysis.py`. Rainfall: {src}. Catchment: {u['catchment_area_km2']} km² of land centred on "
+        f"{catch['latitude']}° N, {catch['longitude']}° E. Drainage capacity "
         f"{u['drainage_capacity_mm_per_day']} mm/day, CN pervious {u['pervious_curve_number']} / impervious "
         f"{u['impervious_curve_number']}. Impervious fraction {100 * f_imp.iloc[0]:.0f} % → {100 * f_imp.iloc[-1]:.0f} % "
         "(GHSL built-up surface, set in `config.yaml`).*",
@@ -282,7 +293,55 @@ def run(demo=False, cfg=None):
         L += [f"![{f.stem}](figures/{f.name})", ""]
     (out / "RESULTS.md").write_text("\n".join(L), encoding="utf-8")
     print(f"  Done -> {out.relative_to(ROOT)}/RESULTS.md")
-    return {"combined": combined, "climate_only": climate_only, "suds": suds}
+    rc = trends.loc[("Climate + urban growth", "runoff_coeff")]
+    rc0 = trends.loc[("Climate only (land use fixed)", "runoff_coeff")]
+    return {
+        "catchment": catch["name"], "results_dir": catch["results_dir"],
+        "built_up_start_%": 100 * f_imp.iloc[0], "built_up_end_%": 100 * f_imp.iloc[-1],
+        "runoff_coeff_mean": combined["runoff_coeff"].mean(),
+        "runoff_coeff_change_%": rc["sen_percent_change"], "runoff_coeff_p": rc["mk_p"],
+        "runoff_coeff_change_fixed_landuse_%": rc0["sen_percent_change"], "runoff_coeff_fixed_landuse_p": rc0["mk_p"],
+        "flood_days_per_yr": combined["flood_days"].mean(),
+        "excess_m3_per_yr": combined["excess_volume_m3"].mean(),
+        "urban_share_runoff_change_%": attr_df.loc["runoff_mm", "urban_share_percent"],
+        "urban_share_flood_volume_change_%": attr_df.loc["excess_volume_m3", "urban_share_percent"],
+        "runoff_mm_change_total": attr_df.loc["runoff_mm", "total_change"],
+        "runoff_mm_change_urban": attr_df.loc["runoff_mm", "urban_part"],
+        "best_strategy": best, "best_volume_reduction_%": suds.loc[best, "volume_reduction_%"],
+    }
+
+
+def write_comparison(summaries, cfg):
+    """Side-by-side table of all catchments (CATCHMENT_COMPARISON.md + CSV)."""
+    df = pd.DataFrame(summaries).set_index("catchment")
+    df.round(4).to_csv(HERE / "catchment_comparison.csv")
+
+    def share(v):
+        return "n/a" if pd.isna(v) else f"{v:.0f} %"
+
+    y0, y1 = cfg["period"]["start_year"], cfg["period"]["end_year"]
+    L = ["# Catchment comparison", "",
+         f"*Same rainfall ({y0}–{y1}), soils and drainage settings in every catchment; only the built-up "
+         "fraction (measured from GHSL) differs. Produced by `analysis.py`.*", "",
+         "| | " + " | ".join(df.index) + " |",
+         "|---|" + "---|" * len(df)]
+
+    def row(label, fmt):
+        L.append(f"| {label} | " + " | ".join(fmt(r) for _, r in df.iterrows()) + " |")
+
+    row(f"Built-up share of land, {y0} → {y1}", lambda r: f"{r['built_up_start_%']:.1f} % → {r['built_up_end_%']:.1f} %")
+    row("Mean runoff coefficient (share of rain that runs off)", lambda r: f"{r['runoff_coeff_mean']:.3f}")
+    row("Change in runoff coefficient over the period", lambda r: f"{r['runoff_coeff_change_%']:+.1f} % (p = {fmt_p(r['runoff_coeff_p'])})")
+    row(f"Same, with land use frozen at {y0}", lambda r: f"{r['runoff_coeff_change_fixed_landuse_%']:+.1f} % (p = {fmt_p(r['runoff_coeff_fixed_landuse_p'])})")
+    row("Change in annual runoff between decades, of which urban growth", lambda r: f"{r['runoff_mm_change_total']:+.0f} mm, {r['runoff_mm_change_urban']:+.0f} mm")
+    row("Urban share of the change in annual runoff", lambda r: share(r["urban_share_runoff_change_%"]))
+    row("Urban share of the change in flood volume", lambda r: share(r["urban_share_flood_volume_change_%"]))
+    row("Drainage-overload days per year", lambda r: f"{r['flood_days_per_yr']:.2f}")
+    row("Excess flood volume per year", lambda r: f"{r['excess_m3_per_yr']:,.0f} m³")
+    row("Best strategy (flood volume reduction)", lambda r: f"{r['best_strategy']} ({r['best_volume_reduction_%']:.0f} %)")
+    L += ["", "Detailed results: " + ", ".join(f"[{i}]({r['results_dir']}/RESULTS.md)" for i, r in df.iterrows()) + "."]
+    (HERE / "CATCHMENT_COMPARISON.md").write_text("\n".join(L), encoding="utf-8")
+    print("  Done -> project2_urban_flood_risk/CATCHMENT_COMPARISON.md")
 
 
 if __name__ == "__main__":

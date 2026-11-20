@@ -1,0 +1,9 @@
+scenario,variable,mean,mk_Z,mk_p,kendall_tau,mk_trend,sen_slope_per_yr,sen_ci_low,sen_ci_high,sen_change_over_period,ols_slope_per_yr,ols_r2,ols_p,lag1_r,autocorrelated,sen_percent_change
+Climate + urban growth,flood_days,0.25,0.18794,0.85093,0.02632,no significant trend,0.0,0.0,0.0,0.0,-0.00827,0.00791,0.70922,0.03261,False,0.0
+Climate + urban growth,excess_volume_m3,150931.40554,0.23398,0.815,0.03158,no significant trend,0.0,0.0,0.0,0.0,67.48036,0.0,0.99685,-0.0886,False,0.0
+Climate + urban growth,runoff_coeff,0.15131,1.9791,0.0478,0.32632,significant increase,0.00258,4e-05,0.00458,0.04897,0.00244,0.22338,0.03534,0.31689,False,32.36289
+Climate + urban growth,max_daily_runoff_mm,32.3903,0.292,0.77029,0.05263,no significant trend,0.29005,-1.34025,1.08051,5.5109,0.09756,0.00055,0.92164,0.07389,False,17.01403
+Climate only (land use fixed),flood_days,0.2,-0.31637,0.75172,-0.03684,no significant trend,0.0,0.0,0.0,0.0,-0.01805,0.04164,0.38815,-0.08462,False,0.0
+Climate only (land use fixed),excess_volume_m3,139852.76002,-0.15797,0.87448,-0.02105,no significant trend,0.0,0.0,0.0,0.0,-1478.10085,0.00049,0.926,-0.09119,False,0.0
+Climate only (land use fixed),runoff_coeff,0.1208,-0.292,0.77029,-0.05263,no significant trend,-0.00044,-0.00314,0.00186,-0.00845,-0.00047,0.01031,0.67009,0.07358,False,-6.99817
+Climate only (land use fixed),max_daily_runoff_mm,30.75495,0.16222,0.87113,0.03158,no significant trend,0.12984,-1.45275,0.91599,2.46691,-0.05656,0.0002,0.95307,0.06838,False,8.02117

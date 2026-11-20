@@ -29,23 +29,43 @@ statistics:
 #  Project 2 — urban hydrology settings
 # ---------------------------------------------------------------------
 urban:
-  catchment_area_km2: 25.0         # size of the urban drainage catchment being modelled
-  pervious_curve_number: 74        # SCS CN for open soil/grass (hydrologic soil group C, fair condition)
+  pervious_curve_number: 74       # SCS CN for open soil/grass (hydrologic soil group C, fair condition)
   impervious_curve_number: 98      # SCS CN for roofs, roads and paved areas
   initial_abstraction_ratio: 0.2   # lambda in Ia = lambda * S (standard SCS value)
   drainage_capacity_mm_per_day: 40 # runoff depth the drains can evacuate in a day
   use_antecedent_moisture: true    # adjust CN for wet/dry soil (AMC I / II / III)
 
-  # Impervious (built-up) fraction of the catchment by year, measured from the
-  # GHSL built-up surface (GHS-BUILT-S R2023A) with tools/gee_impervious_ghsl.js
-  # for a 25 km² circle around central Lagos. GHSL is available in 5-year epochs;
-  # the 2025 epoch is used for 2024 and years in between are interpolated.
-  impervious_fraction_by_year:
-    2005: 0.5470
-    2010: 0.5479
-    2015: 0.5489
-    2020: 0.5497
-    2024: 0.5498
+# Catchments modelled in Project 2. Each is a 25 km² circle; the impervious (built-up)
+# fraction by year was measured from the GHSL built-up surface (GHS-BUILT-S R2023A)
+# with tools/gee_impervious_ghsl.js. GHSL is available in 5-year epochs; the 2025
+# epoch is used for 2024 and years in between are interpolated. All catchments share
+# the soil, drainage and rainfall settings above, so differences between them come
+# from land use alone.
+catchments:
+  central_lagos:
+    name: "Central Lagos"
+    latitude: 6.5244
+    longitude: 3.3792
+    area_km2: 23.8                 # land area of the circle (lagoon water removed with JRC Global Surface Water)
+    results_dir: results
+    impervious_fraction_by_year:   # built-up share of land only
+      2005: 0.5650
+      2010: 0.5660
+      2015: 0.5669
+      2020: 0.5676
+      2024: 0.5676
+  lekki_ajah:
+    name: "Lekki–Ajah corridor"
+    latitude: 6.445
+    longitude: 3.545
+    area_km2: 23.6                 # land area of the circle (lagoon water removed with JRC Global Surface Water)
+    results_dir: results_lekki_ajah
+    impervious_fraction_by_year:   # built-up share of land only
+      2005: 0.1588
+      2010: 0.1936
+      2015: 0.2340
+      2020: 0.2568
+      2024: 0.2598
 
 # Nature-based and engineering ("grey") flood-reduction scenarios tested in Project 2.
 #   disconnected_impervious: share of the impervious area whose runoff is redirected into

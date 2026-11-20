@@ -1,0 +1,5 @@
+parameter,low,high,range
+Impervious fraction ±10 %,0.25,0.25,0.0
+Pervious CN ±5 %,0.2,0.3,0.1
+Initial abstraction ratio 0.05 vs 0.30,0.35,0.2,0.15
+Drainage capacity ±20 %,0.45,0.15,0.3

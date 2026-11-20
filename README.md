@@ -13,7 +13,7 @@ The first study describes the hazard (the rain). The second turns that rain into
 ## Main findings
 
 - **Rainfall.** Annual rainfall averaged about 1,590 mm with no statistically significant trend in any of the 14 indices. The extremes are moving upwards, though: the wettest day of the year was about 25 % higher in 2015–2024 than in 2005–2014. Under the Gumbel model, the storm that was a 1-in-10-year event in the first decade behaves more like a 1-in-4-year event in the second. With only 20 years of data these changes can't yet be confirmed statistically.
-- **Flood risk.** Satellite measurements (GHSL) show that central Lagos was already about 55 % built-up in 2005 and has barely changed since, so in this catchment rainfall, not new building, explains almost all of the recent change in modelled flooding. Of the strategies tested, combining green infrastructure with drain upgrades cut modelled flood volume the most (59 %). The city's growth since 2005 has happened on its edges, often on wetland, which is the focus of study 3.
+- **Flood risk.** Satellite measurements (GHSL) show two very different Lagoses. Central Lagos was already 57 % built-up in 2005 and has barely changed, so there rainfall explains almost all of the recent change in modelled flooding. In the fast-growing Lekki–Ajah corridor, built-up land rose from 16 % to 26 %, and under the same rain the share that runs off rose by 32 % (p = 0.048), entirely because of new development. In both areas, combining green infrastructure with drain upgrades cut modelled flood volume the most (49–60 %). See the [catchment comparison](project2_urban_flood_risk/CATCHMENT_COMPARISON.md).
 - Full numbers, tables and figures are in each study's `results/RESULTS.md`.
 
 ## Data
@@ -59,7 +59,7 @@ It also runs in Google Colab:
 
 `python run_all.py --demo` runs everything on synthetic rainfall, which is useful for checking the code without internet access. Demo outputs go to `results_demo/` folders, are marked "DEMO DATA", and are not part of the findings.
 
-To study another city, change the name and coordinates in `config.yaml` (and, for study 2, the built-up fractions).
+To study another city, change the name and coordinates in `config.yaml`. For study 2, add a catchment under `catchments` with its land area and the built-up fractions measured with the Earth Engine script.
 
 ## Limitations
 
