@@ -1,6 +1,6 @@
 # Project 2 — Concrete, Climate and Floods: Modelling How Urban Growth and Changing Rainfall Drive Flood Risk in Lagos, and Testing Sustainable Drainage Solutions (2005–2024)
 
-**Author:** *[Your Name]* · **Type:** Independent research project · **Tools:** Python, SCS Curve Number hydrology, Google Earth Engine (GHSL), statistics
+**Author:** Atta Albert · **Type:** Independent research project · **Tools:** Python, SCS Curve Number hydrology, Google Earth Engine (GHSL), statistics
 **Keywords:** urban flooding, impervious surfaces, rainfall–runoff modelling, SCS Curve Number, Poisson regression, attribution, sustainable urban drainage (SuDS), nature-based solutions, urban planning, SDG 11 & 13
 
 ---
@@ -247,7 +247,19 @@ where $d_i$ is the difference in rank of year $i$ between the two series.
 
 ## 8. Conclusions and recommendations
 
-Fill in from `RESULTS.md`. Suggested structure: (1) the trend in flood days and its Poisson IRR; (2) the climate vs urban-growth share; (3) the best-performing strategy and its % reduction; (4) the most sensitive parameter; (5) 3–4 concrete planning recommendations.
+> ⚠️ These conclusions use the **placeholder** impervious fractions in `config.yaml` (45 % in 2005 rising to 60 % in 2024). Run [`tools/gee_impervious_ghsl.js`](../tools/gee_impervious_ghsl.js), paste the measured GHSL values into `config.yaml`, re-run the analysis and update the numbers below before citing them.
+
+Full numbers are in [`results/RESULTS.md`](results/RESULTS.md).
+
+1. **Urban growth makes more of the rain run off.** The runoff coefficient (share of rain that becomes runoff) rose significantly, by 26 % over the period (Mann-Kendall p = 0.004), when the city grows. With land use frozen at 2005 it shows no trend (+2 %, p = 0.92). The change in *how much water runs off* is therefore driven by the city, not the rain: urban growth accounts for essentially all of the increase in annual runoff (+60 mm of +59 mm).
+2. **Flood days are rare in this model and their trend is not significant.** With 40 mm/day drainage capacity, the catchment overloads on average 0.5 days per year (10 days in 20 years). Poisson regression gives +4.0 % per year (IRR = 1.040, 95 % CI 0.93–1.16, p = 0.48), so this rise is not statistically significant. In the attribution, urban growth explains about 75 % of the extra flood days and 36 % of the extra flood volume between the two decades; because so few flood days occur, these shares are indicative only.
+3. **Integrated green + grey drainage works best.** Applied to today's city over 20 years of real rainfall, combining green infrastructure (25 % of paved area disconnected, 10 mm/day storage) with a 25 % drain upgrade cuts flood volume by **61 %** and flood days by 73 %. A drain upgrade alone gives 34 %, rain gardens with permeable paving 31 %, and green roofs alone 11 %. Only the strategies that include green infrastructure also lower the runoff coefficient, which reduces the water sent downstream to the lagoon.
+4. **Drainage capacity is the most important unknown.** Changing it by ±20 % moves average flood days from 0.35 to 1.05 per year, a larger effect than any other parameter. Measuring real drain capacity, including the effect of solid-waste blockage, is the highest priority for improving the model.
+5. **Planning recommendations:**
+   * Combine green and grey measures instead of relying on bigger drains alone: require on-site retention (rain tanks, soakaways, permeable paving) in new developments, and upgrade key drains.
+   * Set maximum impervious-cover limits for new developments and protect the remaining wetlands and floodplains, since land-use change drives the rise in runoff.
+   * Keep existing drains clear: lost capacity from blockage has the biggest effect on flooding in this model.
+   * Measure the real impervious fraction (GHSL) and drain capacities, and record actual flood events in `data/flood_events.csv` so the model can be validated.
 
 ## 9. How to reproduce
 

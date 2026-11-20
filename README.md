@@ -51,7 +51,7 @@ Project 1 describes **the hazard** (the rain). Project 2 turns that rain into **
 **Option A — on your computer** (Python 3.9+):
 
 ```bash
-git clone https://github.com/<your-username>/climate-flood-research.git
+git clone https://github.com/Secure14X/climate-flood-research.git
 cd climate-flood-research
 pip install -r requirements.txt
 python tests/test_stats.py        # check the maths (all should PASS)
@@ -62,7 +62,7 @@ python run_all.py                 # download data and run both projects
 open [colab.research.google.com](https://colab.research.google.com) → *New notebook*, then run:
 
 ```python
-!git clone https://github.com/<your-username>/climate-flood-research.git
+!git clone https://github.com/Secure14X/climate-flood-research.git
 %cd climate-flood-research
 !pip install -q -r requirements.txt
 !python run_all.py
@@ -90,4 +90,4 @@ Code: MIT License (see [`LICENSE`](LICENSE)). Data remain under the terms of the
 
 ## 📬 Author
 
-*[Atta Albert]* — *[albertsecurx@gmail.com]*
+**Atta Albert** — albertsecurx@gmail.com

@@ -1,6 +1,6 @@
 # Project 1 — Is the Rain Changing? A Statistical Analysis of Rainfall Patterns and Extreme-Rainfall Trends in Lagos, Nigeria (2005–2024)
 
-**Author:** *[Your Name]* · **Type:** Independent research project · **Tools:** Python (pandas, NumPy, SciPy, Matplotlib), NASA POWER / ERA5 climate data
+**Author:** Atta Albert · **Type:** Independent research project · **Tools:** Python (pandas, NumPy, SciPy, Matplotlib), NASA POWER / ERA5 climate data
 **Keywords:** climate variability, rainfall trend, Mann-Kendall, Sen's slope, extreme rainfall, ETCCDI indices, return period, Gumbel distribution, urban flooding
 
 ---
@@ -278,12 +278,15 @@ When writing up the findings, consider:
 
 ## 9. Conclusions and recommendations
 
-Fill in after running the analysis, using the headline findings in `RESULTS.md`. Suggested structure:
+Based on NASA POWER daily rainfall for central Lagos, 2005–2024 (all 7,305 days available, no missing data; full numbers in [`results/RESULTS.md`](results/RESULTS.md)):
 
-1. State which indices changed significantly, by how much (Sen's slope, % change) and in which direction.
-2. State whether rainfall intensity/extremes changed differently from totals.
-3. State how the 10-year storm's frequency changed between decades.
-4. Recommendations — e.g. update drainage design rainfall (IDF curves) using recent data, include a climate-change uplift factor, and strengthen rain-gauge monitoring.
+1. **No statistically significant trend.** None of the 14 rainfall indices and none of the 12 calendar months shows a significant Mann-Kendall trend at the 5 % level. Mean annual rainfall is 1,588 mm with moderate year-to-year variability (CV = 17.2 %), and the Pettitt test finds no significant change point (p = 0.88). With only 20 years of data, this means changes cannot be *confirmed*, not that they are absent.
+2. **Totals flat, extremes pointing upward.** The direction of change differs between totals and extremes. Annual rainfall fell slightly between the two decades (−3.5 %) and there were fewer wet days (−7.1 %). Meanwhile the wettest day of the year rose by 24.6 %, rain from extreme days (> P95) by 24.3 %, and days with ≥ 50 mm went from 0.6 to 1.4 per year. This "fewer but heavier rain days" pattern is what climate science expects under warming, but none of these differences is statistically significant (all p > 0.09), so they should be treated as *indications* that need a longer record.
+3. **The 10-year storm has become more frequent in the model.** The Gumbel fit is acceptable (K-S p = 0.48). The 1-in-10-year daily rainfall was 87 mm in 2005–2014; in the 2015–2024 fit, the same storm behaves like a **1-in-3.7-year** event, and the 10-year design storm rises from 87 to 119 mm. Each decade has only 10 annual maxima, so these decade-specific return levels are uncertain.
+4. **Recommendations:**
+   * Review Lagos drainage design rainfall (IDF curves) with recent data rather than older records, and consider a climate-change uplift factor for extremes.
+   * Strengthen rain-gauge monitoring (NiMet) and validate these satellite/reanalysis results against gauges, which capture point extremes better.
+   * Extend the record (e.g. ERA5 back to 1980) and apply a non-stationary GEV model to confirm or reject the apparent rise in extremes.
 
 ## 10. How to reproduce
 

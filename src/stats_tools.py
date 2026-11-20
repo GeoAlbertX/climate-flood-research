@@ -100,7 +100,8 @@ def sens_slope(t, x, confidence=0.95):
     t, x = np.asarray(t, float), np.asarray(x, float)
     ok = ~np.isnan(x)
     slope, intercept, lo, hi = stats.theilslopes(x[ok], t[ok], alpha=confidence)
-    return {"slope": slope, "intercept": intercept, "ci_low": lo, "ci_high": hi}
+    # "+ 0.0" turns a floating-point negative zero (-0.0) into 0.0 so tables never show "-0.000"
+    return {"slope": slope + 0.0, "intercept": intercept + 0.0, "ci_low": lo + 0.0, "ci_high": hi + 0.0}
 
 
 def mann_kendall_tfpw(t, x, alpha=0.05):
