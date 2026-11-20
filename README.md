@@ -13,10 +13,8 @@ The first study describes the hazard (the rain). The second turns that rain into
 ## Main findings
 
 - **Rainfall.** Annual rainfall averaged about 1,590 mm with no statistically significant trend in any of the 14 indices. The extremes are moving upwards, though: the wettest day of the year was about 25 % higher in 2015–2024 than in 2005–2014. Under the Gumbel model, the storm that was a 1-in-10-year event in the first decade behaves more like a 1-in-4-year event in the second. With only 20 years of data these changes can't yet be confirmed statistically.
-- **Flood risk.** As the built-up area grows, the share of rain that turns into runoff rises significantly (+26 %, p = 0.004). With land use held at 2005 levels, it barely changes. Of the strategies tested, combining green infrastructure with drain upgrades cut modelled flood volume the most (about 60 %).
+- **Flood risk.** Satellite measurements (GHSL) show that central Lagos was already about 55 % built-up in 2005 and has barely changed since, so in this catchment rainfall, not new building, explains almost all of the recent change in modelled flooding. Of the strategies tested, combining green infrastructure with drain upgrades cut modelled flood volume the most (59 %). The city's growth since 2005 has happened on its edges, often on wetland, which is the focus of study 3.
 - Full numbers, tables and figures are in each study's `results/RESULTS.md`.
-
-Note: the built-up fractions used in study 2 are still provisional estimates. They will be replaced with values measured from GHSL (see [`tools/gee_impervious_ghsl.js`](tools/gee_impervious_ghsl.js)).
 
 ## Data
 

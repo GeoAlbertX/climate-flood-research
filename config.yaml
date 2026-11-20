@@ -36,16 +36,16 @@ urban:
   drainage_capacity_mm_per_day: 40 # runoff depth the drains can evacuate in a day
   use_antecedent_moisture: true    # adjust CN for wet/dry soil (AMC I / II / III)
 
-  # Impervious (built-up) fraction of the catchment by year.
-  # Provisional estimates, to be replaced with values measured using
-  # tools/gee_impervious_ghsl.js (GHSL built-up surface, available in 5-year epochs).
-  # Years in between are interpolated.
+  # Impervious (built-up) fraction of the catchment by year, measured from the
+  # GHSL built-up surface (GHS-BUILT-S R2023A) with tools/gee_impervious_ghsl.js
+  # for a 25 km² circle around central Lagos. GHSL is available in 5-year epochs;
+  # the 2025 epoch is used for 2024 and years in between are interpolated.
   impervious_fraction_by_year:
-    2005: 0.45
-    2010: 0.49
-    2015: 0.53
-    2020: 0.57
-    2024: 0.60
+    2005: 0.5470
+    2010: 0.5479
+    2015: 0.5489
+    2020: 0.5497
+    2024: 0.5498
 
 # Nature-based and engineering ("grey") flood-reduction scenarios tested in Project 2.
 #   disconnected_impervious: share of the impervious area whose runoff is redirected into

@@ -284,7 +284,7 @@ def run(demo=False, cfg=None):
         lines.append(f"![{f.stem}](figures/{f.name})")
         lines.append("")
     (out / "RESULTS.md").write_text("\n".join(lines), encoding="utf-8")
-    print(f"  Done → {out.relative_to(HERE.parent)}/RESULTS.md")
+    print(f"  Done -> {out.relative_to(HERE.parent)}/RESULTS.md")
     return {"indices": idx, "trends": trends, "daily": daily}
 
 

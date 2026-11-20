@@ -41,7 +41,7 @@ This work connects to **UN Sustainable Development Goal 11** (sustainable cities
 | Soil / land-cover runoff parameters | SCS Curve Number tables (USDA NRCS TR-55, 1986) | CN = 98 impervious; CN = 74 open land, soil group C |
 | Recorded flood events *(optional)* | News archives, NEMA/LASEMA reports, Dartmouth Flood Observatory, EM-DAT | Enter in [`data/flood_events.csv`](../data/flood_events.csv) |
 
-**Status of the built-up data:** the impervious fractions currently in `config.yaml` (45 % in 2005 rising to 60 % in 2024) are provisional estimates. They will be replaced with values measured from GHSL using the Earth Engine script, and the results rerun.
+**Built-up data:** the impervious fractions in `config.yaml` were measured from GHSL with the Earth Engine script: 54.7 % in 2005, 54.8 % in 2010, 54.9 % in 2015, 55.0 % in 2020 and 55.0 % in 2025 (used for 2024).
 
 ## 4. Methodology
 
@@ -220,7 +220,7 @@ All numbers, tables and figures are in [`results/RESULTS.md`](results/RESULTS.md
 | Figure | What it shows |
 |---|---|
 | `01_scs_runoff_curves` | How more paving turns the same rain into more runoff (conceptual) |
-| `02_impervious_and_runoff_coefficient` | Growth of paved area and the rising share of rain that runs off |
+| `02_impervious_and_runoff_coefficient` | Built-up area over time and the share of rain that runs off |
 | `03_flood_days_per_year` | Flood days with and without urban growth, with Poisson trend |
 | `04_excess_flood_volume` | Floodwater volume the drains could not carry |
 | `05_suds_scenarios` | Flood days and volume reduction for each strategy |
@@ -228,13 +228,15 @@ All numbers, tables and figures are in [`results/RESULTS.md`](results/RESULTS.md
 
 ## 6. Discussion
 
-**Which driver dominates?** The attribution suggests that over these 20 years, land-use change matters more than rainfall change for how much water runs off. Runoff rose by about 59 mm a year between the two decades, and virtually all of that came from the growth in built-up area; with land use held at 2005 levels, runoff hardly changed. For flood days the split is less clear-cut (roughly three quarters urban, one quarter rainfall), and for flood volume rainfall plays the larger part. That fits Project 1, where the heaviest storms appear to have intensified. Rainfall decides when a flood happens, and urban growth makes every storm produce more water.
+**Which driver dominates?** In this catchment, rainfall. The GHSL measurements show that central Lagos was already about 55 % built-up in 2005 and has barely changed since (54.7 % to 55.0 %). With so little new building, the model attributes almost all of the change between the two decades to rainfall: the slight rise in flood days, and 99 % of the extra flood volume. The runoff coefficient shows no significant trend (+3.8 %, p = 0.77). That fits Project 1, where the heaviest storms appear to have intensified while annual totals did not.
+
+This does not mean urbanisation is unimportant for Lagos flooding. It means the urban growth of the last twenty years happened somewhere else: on the city's edges in Lekki, Ajah, Ikorodu and around the lagoon, often on wetland. A central catchment is the wrong place to look for its effect, which is the question taken up by the [wetland and reclamation study](https://github.com/GeoAlbertX/lagos-wetland-reclamation). An earlier version of this analysis used assumed built-up values (45 % rising to 60 %) and found a strong urban effect. Replacing them with satellite measurements removed it, which shows how much the conclusions depend on measured rather than assumed land cover.
 
 **Green versus grey.** Upgrading the drains alone reduced flood volume by about a third, similar to rain gardens with permeable paving. The two approaches work differently, though. Bigger drains move the same water downstream faster, which can shift the problem to the lagoon and to low-lying neighbourhoods. Green measures reduce the volume at source and bring other benefits, such as cooling, habitat and water reuse. Only the scenarios that included green infrastructure lowered the runoff coefficient. The integrated scenario performed best by a wide margin, which suggests the two approaches complement each other rather than compete.
 
 **Planning implications.** For Lagos, this points to a mix of policies: limits on impervious cover in new developments, required on-site retention (rain tanks, soakaways, permeable paving), protection of the remaining wetlands and floodplains, enforcement of drainage setbacks, and regular clearing of existing drains.
 
-**Uncertainty.** Drainage capacity is the parameter the results depend on most. A 20 % change moves the average from 0.35 to 1.05 flood days a year. Because the model produces only about ten flood days in 20 years, the exact flood-day percentages should be read with caution. The runoff results do not depend on drainage capacity at all, so they are the more robust part of the analysis.
+**Uncertainty.** Drainage capacity is the parameter the results depend on most. A 20 % change moves the average from 0.30 to 0.90 flood days a year. Because the model produces only about nine flood days in 20 years, the exact flood-day percentages should be read with caution. GHSL built-up surface also leaves out many roads and paved yards, so the true impervious share is probably higher than 55 %; raising it by 10 % increases flood days from 0.45 to 0.55 a year.
 
 ## 7. Limitations
 
@@ -247,17 +249,18 @@ All numbers, tables and figures are in [`results/RESULTS.md`](results/RESULTS.md
 
 ## 8. Conclusions and recommendations
 
-These conclusions use the provisional built-up fractions (45 % in 2005 rising to 60 % in 2024). The figures will be updated once the GHSL measurements from [`tools/gee_impervious_ghsl.js`](../tools/gee_impervious_ghsl.js) are in place.
+These conclusions use built-up fractions measured from GHSL for a 25 km² catchment around central Lagos (54.7 % in 2005, 55.0 % in 2025).
 
-1. **Urban growth makes more of the rain run off.** The runoff coefficient (share of rain that becomes runoff) rose significantly, by 26 % over the period (Mann-Kendall p = 0.004), when the city grows. With land use frozen at 2005 it shows no trend (+2 %, p = 0.92). The change in *how much water runs off* is therefore driven by the city, not the rain: urban growth accounts for essentially all of the increase in annual runoff (+60 mm of +59 mm).
-2. **Flood days are rare in this model and their trend is not significant.** With 40 mm/day drainage capacity, the catchment overloads on average 0.5 days per year (10 days in 20 years). Poisson regression gives +4.0 % per year (IRR = 1.040, 95 % CI 0.93–1.16, p = 0.48), so this rise is not statistically significant. In the attribution, urban growth explains about 75 % of the extra flood days and 36 % of the extra flood volume between the two decades; because so few flood days occur, these shares are indicative only.
-3. **Integrated green + grey drainage works best.** Applied to today's city over 20 years of real rainfall, combining green infrastructure (25 % of paved area disconnected, 10 mm/day storage) with a 25 % drain upgrade cuts flood volume by **61 %** and flood days by 73 %. A drain upgrade alone gives 34 %, rain gardens with permeable paving 31 %, and green roofs alone 11 %. Only the strategies that include green infrastructure also lower the runoff coefficient, which reduces the water sent downstream to the lagoon.
-4. **Drainage capacity is the most important unknown.** Changing it by ±20 % moves average flood days from 0.35 to 1.05 per year, a larger effect than any other parameter. Measuring real drain capacity, including the effect of solid-waste blockage, is the highest priority for improving the model.
-5. **Planning recommendations:**
-   * Combine green and grey measures instead of relying on bigger drains alone: require on-site retention (rain tanks, soakaways, permeable paving) in new developments, and upgrade key drains.
-   * Set maximum impervious-cover limits for new developments and protect the remaining wetlands and floodplains, since land-use change drives the rise in runoff.
+1. **Central Lagos was already built up by 2005, so urban growth explains little of the recent change there.** With land use almost constant, the runoff coefficient shows no significant trend (+3.8 %, p = 0.77), and rainfall accounts for 99 % of the increase in flood volume between the two decades.
+2. **Flood days are rare in this model and their trend is not significant.** With 40 mm/day drainage capacity, the catchment overloads on average 0.45 days per year (about nine days in 20 years). Poisson regression gives +1.2 % per year (IRR = 1.012, 95 % CI 0.90–1.13, p = 0.84).
+3. **Integrated green + grey drainage works best.** Applied to the current city over 20 years of real rainfall, combining green infrastructure (25 % of paved area disconnected, 10 mm/day storage) with a 25 % drain upgrade cuts flood volume by **59 %** and flood days by 78 %. A drain upgrade alone gives 34 %, rain gardens with permeable paving 30 %, and green roofs alone 10 %. Only the strategies that include green infrastructure also lower the runoff coefficient, which reduces the water sent downstream to the lagoon.
+4. **Drainage capacity is the most important unknown.** Changing it by ±20 % moves average flood days from 0.30 to 0.90 per year, a larger effect than any other parameter. Measuring real drain capacity, including the effect of solid-waste blockage, is the highest priority for improving the model.
+5. **The effect of urban growth has to be studied where the growth happened.** Running the same model for a fast-growing peri-urban catchment (for example Lekki–Ajah or Ikorodu) is the natural next step.
+6. **Planning recommendations:**
+   * Combine green and grey measures instead of relying on bigger drains alone: require on-site retention (rain tanks, soakaways, permeable paving) and upgrade key drains.
    * Keep existing drains clear: lost capacity from blockage has the biggest effect on flooding in this model.
-   * Measure the real impervious fraction (GHSL) and drain capacities, and record actual flood events in `data/flood_events.csv` so the model can be validated.
+   * Control impervious cover and protect the remaining wetlands and floodplains on the growing edges of the city, where land-use change is still happening.
+   * Measure drain capacities and record actual flood events in `data/flood_events.csv` so the model can be validated.
 
 ## 9. How to reproduce
 

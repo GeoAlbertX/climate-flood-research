@@ -79,8 +79,11 @@ def run(demo=False, cfg=None):
     for col in ["flood_days", "excess_volume_m3", "runoff_mm"]:
         total = dmean(combined, col)
         clim = dmean(climate_only, col)
+        # a share is only meaningful when the total change is not close to zero
+        # (less than 1 % of the variable's mean would give nonsense like 2,000 %)
+        meaningful = abs(total) >= 0.01 * abs(combined[col].mean())
         attr[col] = {"total_change": total, "climate_part": clim, "urban_part": total - clim,
-                     "urban_share_percent": 100 * (total - clim) / total if total else np.nan}
+                     "urban_share_percent": 100 * (total - clim) / total if meaningful else np.nan}
     attr_df = pd.DataFrame(attr).T
     attr_df.round(3).to_csv(out / "tables" / "attribution_climate_vs_urban.csv")
 
@@ -223,7 +226,7 @@ def run(demo=False, cfg=None):
         f"*Produced by `analysis.py`. Rainfall: {src}. Catchment {u['catchment_area_km2']} km², drainage capacity "
         f"{u['drainage_capacity_mm_per_day']} mm/day, CN pervious {u['pervious_curve_number']} / impervious "
         f"{u['impervious_curve_number']}. Impervious fraction {100 * f_imp.iloc[0]:.0f} % → {100 * f_imp.iloc[-1]:.0f} % "
-        "(provisional values, to be replaced with GHSL measurements).*",
+        "(GHSL built-up surface, set in `config.yaml`).*",
         "",
         "## 1. Flood-trend statistics",
         "",
@@ -252,8 +255,9 @@ def run(demo=False, cfg=None):
           "| Quantity | Total change | Due to rainfall change | Due to urban growth | Urban share |",
           "|---|---|---|---|---|"]
     for k, r in attr_df.iterrows():
-        L.append(f"| {k} | {r['total_change']:+.3g} | {r['climate_part']:+.3g} | {r['urban_part']:+.3g} | "
-                 f"{r['urban_share_percent']:.0f} % |")
+        share = ("n/a (total change close to zero)" if pd.isna(r["urban_share_percent"])
+                 else f"{r['urban_share_percent']:.0f} %")
+        L.append(f"| {k} | {r['total_change']:+.3g} | {r['climate_part']:+.3g} | {r['urban_part']:+.3g} | {share} |")
     L += ["", "*Method: run the model twice — once with real land-use growth, once with land use frozen at "
           f"{y0}. The difference between the two runs is the effect of urbanisation.*", "",
           "## 3. Sustainable drainage (SuDS) scenarios", "",
@@ -277,7 +281,7 @@ def run(demo=False, cfg=None):
     for f in sorted(F.glob("*.png")):
         L += [f"![{f.stem}](figures/{f.name})", ""]
     (out / "RESULTS.md").write_text("\n".join(L), encoding="utf-8")
-    print(f"  Done → {out.relative_to(ROOT)}/RESULTS.md")
+    print(f"  Done -> {out.relative_to(ROOT)}/RESULTS.md")
     return {"combined": combined, "climate_only": climate_only, "suds": suds}
 
 
