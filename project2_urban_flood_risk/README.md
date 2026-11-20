@@ -1,6 +1,7 @@
 # Project 2 — Concrete, Climate and Floods: Modelling How Urban Growth and Changing Rainfall Drive Flood Risk in Lagos, and Testing Sustainable Drainage Solutions (2005–2024)
 
-**Author:** Atta Albert · **Type:** Independent research project · **Tools:** Python, SCS Curve Number hydrology, Google Earth Engine (GHSL), statistics
+Atta Albert · Independent research project · Python, SCS Curve Number hydrology, Google Earth Engine (GHSL), statistics
+
 **Keywords:** urban flooding, impervious surfaces, rainfall–runoff modelling, SCS Curve Number, Poisson regression, attribution, sustainable urban drainage (SuDS), nature-based solutions, urban planning, SDG 11 & 13
 
 ---
@@ -9,7 +10,7 @@
 
 Urban floods happen when more water reaches the ground surface than the soil can absorb and the drains can carry away. Two things increase that water: **heavier rain** (climate) and **more concrete** (urbanisation), because roofs and roads stop rain from soaking in. This project builds a transparent rainfall–runoff model for a 25 km² urban catchment in Lagos using the **USDA SCS Curve Number** method, driven by 20 years of observed daily rainfall (2005–2024) and a growing impervious (built-up) surface fraction measured from the **Global Human Settlement Layer (GHSL)**. It (1) quantifies the trend in "drainage-overload days" and flood volume using **Mann-Kendall**, **Sen's slope** and **Poisson regression**; (2) **separates** how much of the change is caused by rainfall change versus urban growth, using a counterfactual model run; (3) compares five planning strategies — green roofs, rain gardens and permeable paving, drain upgrades, and an integrated green–grey approach; and (4) tests how sensitive the conclusions are to the model's assumptions. Results are in [`results/RESULTS.md`](results/RESULTS.md).
 
-> **In plain English:** I built a simple computer model of a part of Lagos that converts each day's rain into the amount of water running off the streets. I then asked three questions: *Are floods getting more frequent? Is that because of the rain or because the city is being paved over? And which solutions — green or concrete — would cut flooding the most?*
+In simple terms, the model takes each day's rain over part of Lagos and works out how much of it runs off the streets. I used it to ask three things: are floods becoming more frequent, is that because of the rain or because more of the city is paved, and which solutions (green, concrete or both) would reduce flooding the most?
 
 ---
 
@@ -40,7 +41,7 @@ This work connects to **UN Sustainable Development Goal 11** (sustainable cities
 | Soil / land-cover runoff parameters | SCS Curve Number tables (USDA NRCS TR-55, 1986) | CN = 98 impervious; CN = 74 open land, soil group C |
 | Recorded flood events *(optional)* | News archives, NEMA/LASEMA reports, Dartmouth Flood Observatory, EM-DAT | Enter in [`data/flood_events.csv`](../data/flood_events.csv) |
 
-> ⚠️ **Important:** the impervious fractions in `config.yaml` are **placeholders**. Before reporting results, run the Earth Engine script (free account at code.earthengine.google.com) and paste your measured values into `config.yaml`. This is the most important data step you perform yourself.
+**Status of the built-up data:** the impervious fractions currently in `config.yaml` (45 % in 2005 rising to 60 % in 2024) are provisional estimates. They will be replaced with values measured from GHSL using the Earth Engine script, and the results rerun.
 
 ## 4. Methodology
 
@@ -79,11 +80,7 @@ $$
 Q = \begin{cases} \dfrac{(P - I_a)^2}{P - I_a + S} & P > I_a \\[3mm] 0 & P \le I_a \end{cases}
 $$
 
-> **Worked example:** grassland with CN = 80 and 100 mm of rain.
-> S = 25400/80 − 254 = **63.5 mm**; Iₐ = 0.2 × 63.5 = **12.7 mm**;
-> Q = (100 − 12.7)² / (100 − 12.7 + 63.5) = 7,621 / 150.8 = **50.5 mm**.
-> So about half the rain runs off. On concrete (CN = 98), the same storm gives **≈ 95 mm** of runoff.
-> (This example is checked in `tests/test_stats.py`.)
+For example, take grassland with CN = 80 and 100 mm of rain. Then S = 25400/80 − 254 = 63.5 mm, Iₐ = 0.2 × 63.5 = 12.7 mm and Q = (100 − 12.7)² / (100 − 12.7 + 63.5) = 7,621 / 150.8 = 50.5 mm, so about half the rain runs off. On concrete (CN = 98), the same storm produces about 95 mm of runoff. This example is also one of the checks in `tests/test_stats.py`.
 
 **Step 4 — Mixed urban catchment.** A city is part paved and part open. With impervious fraction $f$, runoff is area-weighted:
 
@@ -118,7 +115,7 @@ $$
 f(t) = f(t_1) + \frac{t - t_1}{t_2 - t_1}\,\big[f(t_2) - f(t_1)\big]
 $$
 
-> Built-up area does not include every road or paved yard, so it slightly **underestimates** true imperviousness — note this in limitations.
+Built-up area does not include every road or paved yard, so it slightly underestimates true imperviousness (see the limitations section).
 
 ### 4.3 Flood (drainage-overload) indicator
 
@@ -180,7 +177,7 @@ $$
 \text{Urban share} = 100 \times \frac{\Delta_{\text{urban}}}{\Delta_{\text{total}}}\;\%
 $$
 
-> **In plain English:** if the city had stopped growing in 2005, how much would flooding still have changed? That part is due to the rain; the rest is due to building.
+The idea is simple: if the city had stopped growing in 2005, how much would flooding still have changed? That part is due to the rain, and the rest is due to building.
 
 ### 4.6 SuDS and planning scenarios
 
@@ -200,7 +197,7 @@ $$
 \text{Reduction} = 100 \times \left(1 - \frac{V_{\text{scenario}}}{V_{\text{BAU}}}\right)\%
 $$
 
-All scenario values are editable in `config.yaml` so you can test your own policies.
+The scenario settings are in `config.yaml`, so other policy options can be tested easily.
 
 ### 4.7 Sensitivity analysis
 
@@ -218,7 +215,7 @@ where $d_i$ is the difference in rank of year $i$ between the two series.
 
 ## 5. Results
 
-👉 **All numbers, tables and figures are in [`results/RESULTS.md`](results/RESULTS.md)** (auto-generated).
+All numbers, tables and figures are in [`results/RESULTS.md`](results/RESULTS.md).
 
 | Figure | What it shows |
 |---|---|
@@ -229,12 +226,15 @@ where $d_i$ is the difference in rank of year $i$ between the two series.
 | `05_suds_scenarios` | Flood days and volume reduction for each strategy |
 | `06_sensitivity_tornado` | Which assumption changes the answer most |
 
-## 6. Discussion guide
+## 6. Discussion
 
-1. **Which driver dominates?** Use the attribution table. In many rapidly growing cities, land-use change is as important as — or more important than — rainfall change over 20 years.
-2. **Green vs grey.** Bigger drains move water downstream faster (shifting the problem to the lagoon/low-lying areas); SuDS reduce the volume at source and provide co-benefits (cooling, biodiversity, water reuse). The integrated option usually performs best — what does that imply for Lagos planning policy?
-3. **Planning implications.** Possible policy levers: maximum impervious-cover limits for new developments, mandatory on-site retention (rain tanks, soakaways), protection of remaining wetlands and floodplains, and enforcement of drainage setbacks.
-4. **Uncertainty.** Discuss the sensitivity results honestly — conclusions that hold across the whole sensitivity range are robust.
+**Which driver dominates?** The attribution suggests that over these 20 years, land-use change matters more than rainfall change for how much water runs off. Runoff rose by about 59 mm a year between the two decades, and virtually all of that came from the growth in built-up area; with land use held at 2005 levels, runoff hardly changed. For flood days the split is less clear-cut (roughly three quarters urban, one quarter rainfall), and for flood volume rainfall plays the larger part. That fits Project 1, where the heaviest storms appear to have intensified. Rainfall decides when a flood happens, and urban growth makes every storm produce more water.
+
+**Green versus grey.** Upgrading the drains alone reduced flood volume by about a third, similar to rain gardens with permeable paving. The two approaches work differently, though. Bigger drains move the same water downstream faster, which can shift the problem to the lagoon and to low-lying neighbourhoods. Green measures reduce the volume at source and bring other benefits, such as cooling, habitat and water reuse. Only the scenarios that included green infrastructure lowered the runoff coefficient. The integrated scenario performed best by a wide margin, which suggests the two approaches complement each other rather than compete.
+
+**Planning implications.** For Lagos, this points to a mix of policies: limits on impervious cover in new developments, required on-site retention (rain tanks, soakaways, permeable paving), protection of the remaining wetlands and floodplains, enforcement of drainage setbacks, and regular clearing of existing drains.
+
+**Uncertainty.** Drainage capacity is the parameter the results depend on most. A 20 % change moves the average from 0.35 to 1.05 flood days a year. Because the model produces only about ten flood days in 20 years, the exact flood-day percentages should be read with caution. The runoff results do not depend on drainage capacity at all, so they are the more robust part of the analysis.
 
 ## 7. Limitations
 
@@ -247,9 +247,7 @@ where $d_i$ is the difference in rank of year $i$ between the two series.
 
 ## 8. Conclusions and recommendations
 
-> ⚠️ These conclusions use the **placeholder** impervious fractions in `config.yaml` (45 % in 2005 rising to 60 % in 2024). Run [`tools/gee_impervious_ghsl.js`](../tools/gee_impervious_ghsl.js), paste the measured GHSL values into `config.yaml`, re-run the analysis and update the numbers below before citing them.
-
-Full numbers are in [`results/RESULTS.md`](results/RESULTS.md).
+These conclusions use the provisional built-up fractions (45 % in 2005 rising to 60 % in 2024). The figures will be updated once the GHSL measurements from [`tools/gee_impervious_ghsl.js`](../tools/gee_impervious_ghsl.js) are in place.
 
 1. **Urban growth makes more of the rain run off.** The runoff coefficient (share of rain that becomes runoff) rose significantly, by 26 % over the period (Mann-Kendall p = 0.004), when the city grows. With land use frozen at 2005 it shows no trend (+2 %, p = 0.92). The change in *how much water runs off* is therefore driven by the city, not the rain: urban growth accounts for essentially all of the increase in annual runoff (+60 mm of +59 mm).
 2. **Flood days are rare in this model and their trend is not significant.** With 40 mm/day drainage capacity, the catchment overloads on average 0.5 days per year (10 days in 20 years). Poisson regression gives +4.0 % per year (IRR = 1.040, 95 % CI 0.93–1.16, p = 0.48), so this rise is not statistically significant. In the attribution, urban growth explains about 75 % of the extra flood days and 36 % of the extra flood volume between the two decades; because so few flood days occur, these shares are indicative only.
@@ -265,8 +263,8 @@ Full numbers are in [`results/RESULTS.md`](results/RESULTS.md).
 
 ```bash
 pip install -r requirements.txt
-# 1. measure impervious fractions with tools/gee_impervious_ghsl.js and edit config.yaml
-# 2. (optional) add recorded floods to data/flood_events.csv
+# built-up fractions: measured with tools/gee_impervious_ghsl.js and set in config.yaml
+# recorded floods (optional): data/flood_events.csv
 python project2_urban_flood_risk/analysis.py
 ```
 

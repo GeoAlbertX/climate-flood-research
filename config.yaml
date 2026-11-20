@@ -37,9 +37,9 @@ urban:
   use_antecedent_moisture: true    # adjust CN for wet/dry soil (AMC I / II / III)
 
   # Impervious (built-up) fraction of the catchment by year.
-  # !!! THESE ARE PLACEHOLDER ASSUMPTIONS !!!
-  # Replace them with values you measure using tools/gee_impervious_ghsl.js
-  # (GHSL built-up surface, available in 5-year epochs). Years in between are interpolated.
+  # Provisional estimates, to be replaced with values measured using
+  # tools/gee_impervious_ghsl.js (GHSL built-up surface, available in 5-year epochs).
+  # Years in between are interpolated.
   impervious_fraction_by_year:
     2005: 0.45
     2010: 0.49

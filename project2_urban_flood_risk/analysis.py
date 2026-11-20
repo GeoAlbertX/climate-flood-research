@@ -216,14 +216,14 @@ def run(demo=False, cfg=None):
     to = trends.loc["Climate only (land use fixed)"]
     L = []
     if demo:
-        L += ["> ⚠️ **SYNTHETIC DEMO DATA — these numbers are NOT real and must not be reported.**", ""]
+        L += ["> **SYNTHETIC DEMO DATA — these numbers are NOT real and must not be reported.**", ""]
     L += [
         f"# Project 2 Results — {cfg['study_area']['name']}, {y0}–{y1}",
         "",
-        f"*Auto-generated. Rainfall: {src}. Catchment {u['catchment_area_km2']} km², drainage capacity "
+        f"*Produced by `analysis.py`. Rainfall: {src}. Catchment {u['catchment_area_km2']} km², drainage capacity "
         f"{u['drainage_capacity_mm_per_day']} mm/day, CN pervious {u['pervious_curve_number']} / impervious "
         f"{u['impervious_curve_number']}. Impervious fraction {100 * f_imp.iloc[0]:.0f} % → {100 * f_imp.iloc[-1]:.0f} % "
-        "(check `config.yaml` — replace placeholder values with your GHSL measurements).*",
+        "(provisional values, to be replaced with GHSL measurements).*",
         "",
         "## 1. Flood-trend statistics",
         "",
@@ -243,7 +243,7 @@ def run(demo=False, cfg=None):
               f"(95 % CI {pois['irr_ci_low']:.3f}–{pois['irr_ci_high']:.3f}), p = {fmt_p(pois['p'])}, "
               f"dispersion = {pois['dispersion']:.2f}"
               + (f" (overdispersed → quasi-Poisson p = {fmt_p(pois['p_quasi'])})" if pois["dispersion"] > 1.5 else "")
-              + f". In plain English: the expected number of flood days changes by "
+              + f". This means the expected number of flood days changes by "
               f"**{100 * (pois['irr'] - 1):+.1f} % per year**, i.e. ×{pois['irr'] ** (y1 - y0):.2f} over {y1 - y0} years."]
     if pois_c:
         L.append(f"With land use frozen at {y0}, the same model gives IRR = {pois_c['irr']:.3f} (p = {fmt_p(pois_c['p'])}).")

@@ -1,6 +1,6 @@
 # Project 2 Results — Lagos Metropolitan Area, Nigeria, 2005–2024
 
-*Auto-generated. Rainfall: NASA POWER (PRECTOTCORR). Catchment 25.0 km², drainage capacity 40 mm/day, CN pervious 74 / impervious 98. Impervious fraction 45 % → 60 % (check `config.yaml` — replace placeholder values with your GHSL measurements).*
+*Produced by `analysis.py`. Rainfall: NASA POWER (PRECTOTCORR). Catchment 25.0 km², drainage capacity 40 mm/day, CN pervious 74 / impervious 98. Impervious fraction 45 % → 60 % (provisional values, to be replaced with GHSL measurements).*
 
 ## 1. Flood-trend statistics
 
@@ -15,7 +15,7 @@
 | Max daily runoff (mm) | Climate + urban | 41.1 | +0.217 | +10.0 % | 0.770 | no significant trend |
 | Max daily runoff (mm) | Climate only | 38.7 | -0.0248 | -1.2 % | 0.922 | no significant trend |
 
-**Poisson regression of flood days (climate + urban):** IRR = 1.040 (95 % CI 0.933–1.160), p = 0.478, dispersion = 1.26. In plain English: the expected number of flood days changes by **+4.0 % per year**, i.e. ×2.12 over 19 years.
+**Poisson regression of flood days (climate + urban):** IRR = 1.040 (95 % CI 0.933–1.160), p = 0.478, dispersion = 1.26. This means the expected number of flood days changes by **+4.0 % per year**, i.e. ×2.12 over 19 years.
 With land use frozen at 2005, the same model gives IRR = 0.977 (p = 0.719).
 
 ## 2. Attribution — how much is climate, how much is urban growth?

@@ -1,65 +1,54 @@
-# 🌧️ Climate, Flooding & Sustainable Urban Planning — Lagos, Nigeria (2005–2024)
+# Rainfall, urban growth and flood risk in Lagos, Nigeria (2005–2024)
 
-Two linked, fully reproducible research projects that use **20 years of daily rainfall data**, **statistics** and **urban hydrology** to answer one question:
+Flooding in Lagos seems to get worse every rainy season, and people usually blame either "heavier rain" or "too much building". I wanted to see what the data actually says. This repository contains two connected studies that look at the question from both sides:
 
-> **Why is flooding getting worse in fast-growing tropical cities — and what can planners do about it?**
-
-| | Project | Core question | Main methods |
+| | Study | Question | Main methods |
 |---|---|---|---|
-| 1 | [**Is the Rain Changing?**](project1_rainfall_trends/README.md) | How have rainfall amount, intensity, seasonality and extremes changed from 2005 to 2024? | 14 ETCCDI climate indices, Mann-Kendall, Sen's slope, Pettitt change point, Welch & Mann-Whitney tests, Gumbel extreme-value analysis |
-| 2 | [**Concrete, Climate and Floods**](project2_urban_flood_risk/README.md) | How do urban growth and rainfall change drive flood risk, and which sustainable drainage strategy works best? | SCS Curve Number runoff model, GHSL built-up data, Poisson regression, climate-vs-urban attribution, SuDS scenarios, sensitivity analysis |
+| 1 | [Is the rain changing?](project1_rainfall_trends/README.md) | Has rainfall amount, intensity, seasonality or the size of extreme storms changed between 2005 and 2024? | ETCCDI climate indices, Mann-Kendall, Sen's slope, Pettitt test, Welch and Mann-Whitney tests, Gumbel extreme-value analysis |
+| 2 | [Concrete, climate and floods](project2_urban_flood_risk/README.md) | How much of the flood risk comes from urban growth rather than rainfall, and which drainage strategy reduces it most? | SCS Curve Number runoff model, GHSL built-up area, Poisson regression, counterfactual attribution, SuDS scenarios, sensitivity analysis |
 
-Project 1 describes **the hazard** (the rain). Project 2 turns that rain into **flood risk** for the city and tests **solutions**.
+The first study describes the hazard (the rain). The second turns that rain into runoff and flooding for an urban catchment and tests possible solutions.
 
----
+## Main findings
 
-## ✨ Highlights
+- **Rainfall.** Annual rainfall averaged about 1,590 mm with no statistically significant trend in any of the 14 indices. The extremes are moving upwards, though: the wettest day of the year was about 25 % higher in 2015–2024 than in 2005–2014. Under the Gumbel model, the storm that was a 1-in-10-year event in the first decade behaves more like a 1-in-4-year event in the second. With only 20 years of data these changes can't yet be confirmed statistically.
+- **Flood risk.** As the built-up area grows, the share of rain that turns into runoff rises significantly (+26 %, p = 0.004). With land use held at 2005 levels, it barely changes. Of the strategies tested, combining green infrastructure with drain upgrades cut modelled flood volume the most (about 60 %).
+- Full numbers, tables and figures are in each study's `results/RESULTS.md`.
 
-* **Real, open data** — NASA POWER and ERA5 daily rainfall downloaded automatically; GHSL satellite-derived built-up area via Google Earth Engine.
-* **Transparent mathematics** — every equation in the reports maps to a commented function in [`src/`](src/), and core statistics are verified against hand calculations in [`tests/`](tests/).
-* **Plain-English explanations** next to every method, for non-specialist readers.
-* **Auto-generated results** — running the code writes a `RESULTS.md` report with tables, interpretation sentences and 13 figures.
-* **Portable** — change the coordinates in [`config.yaml`](config.yaml) to analyse any city in the world.
+Note: the built-up fractions used in study 2 are still provisional estimates. They will be replaced with values measured from GHSL (see [`tools/gee_impervious_ghsl.js`](tools/gee_impervious_ghsl.js)).
 
-## 📁 Repository structure
+## Data
+
+- **Rainfall:** NASA POWER daily precipitation (PRECTOTCORR) for central Lagos (6.52° N, 3.38° E). ERA5 via Open-Meteo can be used as an alternative source.
+- **Built-up area:** Global Human Settlement Layer (GHS-BUILT-S R2023A), processed in Google Earth Engine.
+- The downloaded rainfall series is saved in `data/raw/` so the results can be reproduced exactly.
+
+## Repository layout
 
 ```
-├── config.yaml                     ← study area, period and model settings
-├── run_all.py                      ← runs both projects
-├── requirements.txt
-├── src/                            ← shared, documented toolkit
-│   ├── data_loader.py              ← downloads & quality-controls daily rainfall
-│   ├── climate_indices.py          ← ETCCDI indices + Precipitation Concentration Index
-│   ├── stats_tools.py              ← Mann-Kendall, Sen, Pettitt, Gumbel, Poisson…
-│   ├── hydrology.py                ← SCS Curve Number urban runoff model
-│   └── plotting.py
-├── project1_rainfall_trends/
-│   ├── README.md                   ← full research report (methods + equations)
-│   ├── analysis.py
-│   └── results/                    ← figures, CSV tables, RESULTS.md (created by the code)
-├── project2_urban_flood_risk/
-│   ├── README.md                   ← full research report
-│   ├── analysis.py
-│   └── results/
-├── tools/gee_impervious_ghsl.js    ← Google Earth Engine script for built-up area
-├── data/                           ← raw downloads cached here; flood-event template
-└── tests/test_stats.py             ← checks of the statistics against known answers
+config.yaml                    study area, period and model settings
+run_all.py                     runs both studies
+src/                           shared code (data download, indices, statistics, hydrology, plots)
+project1_rainfall_trends/      report, analysis script and results for study 1
+project2_urban_flood_risk/     report, analysis script and results for study 2
+tools/gee_impervious_ghsl.js   Earth Engine script for built-up area
+data/                          rainfall data and a template for recorded flood events
+tests/test_stats.py            checks of the statistics against worked examples
 ```
 
-## 🚀 How to run
+## Running it
 
-**Option A — on your computer** (Python 3.9+):
+You need Python 3.9 or newer.
 
 ```bash
 git clone https://github.com/Secure14X/climate-flood-research.git
 cd climate-flood-research
 pip install -r requirements.txt
-python tests/test_stats.py        # check the maths (all should PASS)
-python run_all.py                 # download data and run both projects
+python tests/test_stats.py
+python run_all.py
 ```
 
-**Option B — in your browser, no installation (Google Colab):**
-open [colab.research.google.com](https://colab.research.google.com) → *New notebook*, then run:
+It also runs in Google Colab:
 
 ```python
 !git clone https://github.com/Secure14X/climate-flood-research.git
@@ -68,26 +57,18 @@ open [colab.research.google.com](https://colab.research.google.com) → *New not
 !python run_all.py
 ```
 
-Results appear in `project1_rainfall_trends/results/` and `project2_urban_flood_risk/results/`.
+`python run_all.py --demo` runs everything on synthetic rainfall, which is useful for checking the code without internet access. Demo outputs go to `results_demo/` folders, are marked "DEMO DATA", and are not part of the findings.
 
-**Offline test:** `python run_all.py --demo` runs everything on *synthetic* data (clearly watermarked "DEMO DATA") to check the code works. Demo outputs go to `results_demo/` folders, which are git-ignored — never report them as findings.
+To study another city, change the name and coordinates in `config.yaml` (and, for study 2, the built-up fractions).
 
-## 🔧 Adapting to another city
+## Limitations
 
-Edit `config.yaml`: change `name`, `latitude`, `longitude`, and (for Project 2) the impervious fractions measured with the Earth Engine script. Everything else updates automatically.
+Twenty years is a short record for climate trends, gridded rainfall products underestimate local extremes, and the flood model works at a daily time step for a single lumped catchment. Each report discusses its limitations in more detail.
 
-## 🧠 Skills demonstrated
+## Licence
 
-Climate data analysis · time-series trend detection · non-parametric statistics · extreme-value theory · hydrological modelling · remote-sensing data (GHSL / Google Earth Engine) · urban flood risk assessment · sustainable drainage (SuDS) & nature-based solutions · scenario & sensitivity analysis · reproducible research in Python · scientific communication
+Code is released under the MIT License (see [`LICENSE`](LICENSE)). The data remain under the terms of their providers: NASA POWER, Copernicus/ECMWF ERA5 and the European Commission JRC (GHSL).
 
-## 🌍 Relevance
+## Author
 
-Supports **SDG 11** (Sustainable Cities and Communities — target 11.5, reducing disaster losses) and **SDG 13** (Climate Action), and the evidence base needed for climate-adaptive drainage design and land-use planning.
-
-## 📜 License
-
-Code: MIT License (see [`LICENSE`](LICENSE)). Data remain under the terms of their providers (NASA POWER, Copernicus/ECMWF ERA5, European Commission JRC GHSL).
-
-## 📬 Author
-
-**Atta Albert** — albertsecurx@gmail.com
+Atta Albert, BSc Geography. Contact: albertsecurx@gmail.com

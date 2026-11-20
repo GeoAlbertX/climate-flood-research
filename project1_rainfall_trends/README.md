@@ -1,15 +1,16 @@
 # Project 1 — Is the Rain Changing? A Statistical Analysis of Rainfall Patterns and Extreme-Rainfall Trends in Lagos, Nigeria (2005–2024)
 
-**Author:** Atta Albert · **Type:** Independent research project · **Tools:** Python (pandas, NumPy, SciPy, Matplotlib), NASA POWER / ERA5 climate data
+Atta Albert · Independent research project · Python (pandas, NumPy, SciPy, Matplotlib), NASA POWER / ERA5 climate data
+
 **Keywords:** climate variability, rainfall trend, Mann-Kendall, Sen's slope, extreme rainfall, ETCCDI indices, return period, Gumbel distribution, urban flooding
 
 ---
 
 ## Abstract
 
-Flooding in fast-growing coastal cities such as Lagos is driven first of all by rain — how much falls, how often, and above all how *intensely*. This project examines whether rainfall over Lagos changed between **2005 and 2024** using 20 years (7,305 days) of daily satellite/reanalysis rainfall. Fourteen internationally standardised climate indices (ETCCDI) are calculated for every year, covering total rainfall, number of rainy days, rainfall intensity, wettest days, dry spells and seasonality. Each index is tested for a long-term trend with the non-parametric **Mann-Kendall test**, the size of the change is estimated with **Sen's slope**, sudden shifts are searched for with the **Pettitt change-point test**, and the two decades (2005–2014 vs 2015–2024) are compared with **Welch's t-test** and the **Mann-Whitney U test**. Finally, the size of rare storms (2- to 100-year return periods) is estimated with the **Gumbel extreme-value distribution** to see whether "1-in-10-year" storms have become more common. The full results are in [`results/RESULTS.md`](results/RESULTS.md), generated automatically by the code.
+Flooding in fast-growing coastal cities such as Lagos is driven first of all by rain — how much falls, how often, and above all how *intensely*. This project examines whether rainfall over Lagos changed between **2005 and 2024** using 20 years (7,305 days) of daily satellite/reanalysis rainfall. Fourteen internationally standardised climate indices (ETCCDI) are calculated for every year, covering total rainfall, number of rainy days, rainfall intensity, wettest days, dry spells and seasonality. Each index is tested for a long-term trend with the non-parametric **Mann-Kendall test**, the size of the change is estimated with **Sen's slope**, sudden shifts are searched for with the **Pettitt change-point test**, and the two decades (2005–2014 vs 2015–2024) are compared with **Welch's t-test** and the **Mann-Whitney U test**. Finally, the size of rare storms (2- to 100-year return periods) is estimated with the **Gumbel extreme-value distribution** to see whether "1-in-10-year" storms have become more common. The full results are in [`results/RESULTS.md`](results/RESULTS.md), which the analysis script writes directly from the data.
 
-> **In plain English:** I took 20 years of daily rain records for Lagos, measured 14 different things about the rain each year (how much, how heavy, how many stormy days…), and used statistics to check which of them have really changed — and which changes could just be chance.
+Put simply, I measured 14 different aspects of Lagos rainfall for each of 20 years (how much fell, how heavy it was, how many stormy days there were, and so on) and tested which of them have genuinely changed and which differences could just be chance.
 
 ---
 
@@ -55,7 +56,7 @@ The study point and period are set in [`config.yaml`](../config.yaml), so the wh
 2. Every calendar day 2005-01-01 → 2024-12-31 is checked; missing days are made explicit.
 3. Any year with more than 10 % missing days is excluded from the trend analysis.
 
-> **Limitation to keep in mind:** gridded satellite/reanalysis data represent an *area average* (tens of km wide), so they usually show smaller extreme values than a single rain gauge. Trends are generally more reliable than absolute extreme values. Comparing NASA POWER with ERA5 (just change `source:` in the config) is a simple robustness check.
+One limitation applies throughout: gridded satellite/reanalysis data represent an area average tens of kilometres wide, so they usually show smaller extremes than a single rain gauge would. Trends from these products are generally more reliable than their absolute extreme values. Rerunning the analysis with ERA5 instead of NASA POWER (by changing `source:` in the config) is a simple robustness check.
 
 ## 5. Methodology
 
@@ -105,7 +106,7 @@ $$
 | 16–20 | Seasonal |
 | > 20 | Strongly irregular — most rain in a few months |
 
-> *Check:* if every month had equal rain, PCI = 100/12 ≈ 8.3. If all rain fell in one month, PCI = 100.
+As a check, if every month had equal rain, PCI = 100/12 ≈ 8.3; if all the rain fell in one month, PCI = 100.
 
 ### 5.2 Descriptive statistics and anomalies
 
@@ -123,7 +124,7 @@ $$
 \text{SAI}_i = \frac{x_i - \bar{x}}{s}
 $$
 
-> SAI = +1.5 means "1.5 standard deviations wetter than normal". Years beyond ±1 are classed as notably wet or dry.
+An SAI of +1.5 means the year was 1.5 standard deviations wetter than normal. Years beyond ±1 are treated as notably wet or dry.
 
 ### 5.3 Linear regression trend
 
@@ -135,7 +136,7 @@ $$
 
 The slope is tested with $t = b / SE(b)$ on $n-2$ degrees of freedom, and $R^2$ tells how much of the variation the line explains.
 
-> **Why not stop here?** Rainfall is skewed and has outliers (one huge storm can tilt the line). Regression also assumes normal residuals. So the main tests below are **non-parametric** — they use ranks/signs, not raw values, and are robust to outliers. Regression is kept as a familiar comparison.
+Regression alone isn't enough here. Rainfall is skewed and has outliers (one huge storm can tilt the line), and regression assumes normally distributed residuals. The main tests below are therefore non-parametric: they work with ranks and signs rather than raw values, so outliers have little influence. Regression is kept as a familiar point of comparison.
 
 ### 5.4 Mann-Kendall trend test (Mann, 1945; Kendall, 1975)
 
@@ -162,9 +163,7 @@ $$
 
 If $|Z| > 1.96$ ($p < 0.05$) the trend is significant; the sign of $Z$ gives its direction. Kendall's $\tau = S / [n(n-1)/2]$ ranges from −1 to +1 like a correlation.
 
-> **Worked mini-example:** rainfall in four years = 1, 3, 2, 4 (hundreds of mm).
-> Pairs: (1→3) +1, (1→2) +1, (1→4) +1, (3→2) −1, (3→4) +1, (2→4) +1 → **S = 4**.
-> Var(S) = 4·3·13/18 = 8.67, so Z = (4−1)/√8.67 = **1.02**, p = 0.31 → *not significant* (four years is far too short!). This exact example is checked in `tests/test_stats.py`.
+A small worked example: take rainfall in four years of 1, 3, 2 and 4 (hundreds of mm). The pairs score (1→3) +1, (1→2) +1, (1→4) +1, (3→2) −1, (3→4) +1, (2→4) +1, so S = 4. Then Var(S) = 4·3·13/18 = 8.67, Z = (4−1)/√8.67 = 1.02 and p = 0.31, which is not significant (four years is far too short a record). The same example is used as a check in `tests/test_stats.py`.
 
 **Autocorrelation check.** Mann-Kendall assumes years are independent. If one wet year tends to follow another (lag-1 autocorrelation $r_1$ outside $\pm 1.96/\sqrt{n}$), false trends can appear. In that case the code also runs the **Trend-Free Pre-Whitening** version (Yue et al., 2002): remove the trend, remove the autocorrelation $y_t = x'_t - r_1 x'_{t-1}$, put the trend back, and test again.
 
@@ -241,13 +240,11 @@ Observed maxima are plotted using **Weibull plotting positions** $T = (n+1)/m$ (
 
 **Key test of change:** the Gumbel model is fitted separately to each decade. The first-decade 10-year storm $x_{10}^{(1)}$ is then inserted into the second-decade model to find its *new* return period $T^{(2)}(x_{10}^{(1)})$. If it is now, say, a 1-in-5-year event, that storm has become **twice as frequent** — which directly affects drainage design.
 
-> **Probability tip:** "1-in-100-year" does **not** mean once a century. The chance of at least one such storm in 30 years is $1-(1-1/100)^{30} \approx 26\%$.
+Note that "1-in-100-year" does not mean once a century. The chance of at least one such storm in any 30-year period is $1-(1-1/100)^{30} \approx 26\%$.
 
 ## 6. Results
 
-👉 **All numbers, tables and figures are in [`results/RESULTS.md`](results/RESULTS.md)** (written automatically by `analysis.py` from the real data). CSV tables are in `results/tables/`.
-
-How to read each figure:
+All numbers, tables and figures are in [`results/RESULTS.md`](results/RESULTS.md), with the CSV tables in `results/tables/`. The figures are:
 
 | Figure | What it shows | What to look for |
 |---|---|---|
@@ -259,14 +256,15 @@ How to read each figure:
 | `06_return_levels_gumbel` | Return-level curves by decade | Is the red (recent) curve above the grey one? |
 | `07_decade_boxplots` | Spread of values in each decade | Shift in median and in the upper whisker |
 
-## 7. Discussion guide
+## 7. Discussion
 
-When writing up the findings, consider:
+**Totals versus intensity.** The clearest pattern in the results is that the amount of rain hasn't changed much, but the way it falls may have. Between the two decades, annual rainfall fell slightly (−3.5 %) and there were fewer wet days (−7 %). At the same time, the wettest day of the year rose by about 25 %, rain from extreme days by 24 %, and days with 50 mm or more went from 0.6 to 1.4 per year. Fewer but heavier rain days is the pattern expected in a warming climate, since warmer air holds more moisture. For flooding, the intensity matters more than the annual total.
 
-1. **Totals vs intensity.** A common pattern under climate change is little change in annual rain but *more rain per event*. Compare the ANNUAL trend with SDII, Rx1day and R95pTOT.
-2. **Statistical vs practical significance.** With only 20 years, a +15 % change can be real but not statistically significant (low statistical power). Report the Sen's slope and its confidence interval, not just the p-value.
-3. **Natural variability.** West African rainfall is strongly influenced by the West African Monsoon, Atlantic sea-surface temperatures and ENSO. A 20-year window can be dominated by these multi-year cycles.
-4. **Link to flooding.** Changes in R50mm, Rx1day and return levels matter most for floods — they are the input to Project 2.
+**Statistical versus practical significance.** None of these changes passes the 5 % significance test, which is not surprising with only 20 years of data: a real change of 15–25 % can easily fail to be detected over a period this short. For that reason I report the Sen's slope and its confidence interval alongside each p-value, and describe the changes as indications rather than confirmed trends.
+
+**Natural variability.** West African rainfall is strongly controlled by the West African Monsoon, Atlantic sea-surface temperatures and ENSO, all of which vary over several years. A 20-year window can be dominated by these cycles, so part of the difference between the two decades may be natural variability rather than long-term climate change.
+
+**Link to flooding.** The indices that matter most for urban flooding are Rx1day, R50mm and the return levels, because drains are designed around short, intense storms. The rise in the 10-year design storm, from about 87 mm to 119 mm per day, is directly relevant to drainage design and feeds into the flood model in [Project 2](../project2_urban_flood_risk/README.md).
 
 ## 8. Limitations
 
@@ -278,7 +276,7 @@ When writing up the findings, consider:
 
 ## 9. Conclusions and recommendations
 
-Based on NASA POWER daily rainfall for central Lagos, 2005–2024 (all 7,305 days available, no missing data; full numbers in [`results/RESULTS.md`](results/RESULTS.md)):
+These conclusions are based on NASA POWER daily rainfall for central Lagos, 2005–2024. All 7,305 days were available, with no missing data.
 
 1. **No statistically significant trend.** None of the 14 rainfall indices and none of the 12 calendar months shows a significant Mann-Kendall trend at the 5 % level. Mean annual rainfall is 1,588 mm with moderate year-to-year variability (CV = 17.2 %), and the Pettitt test finds no significant change point (p = 0.88). With only 20 years of data, this means changes cannot be *confirmed*, not that they are absent.
 2. **Totals flat, extremes pointing upward.** The direction of change differs between totals and extremes. Annual rainfall fell slightly between the two decades (−3.5 %) and there were fewer wet days (−7.1 %). Meanwhile the wettest day of the year rose by 24.6 %, rain from extreme days (> P95) by 24.3 %, and days with ≥ 50 mm went from 0.6 to 1.4 per year. This "fewer but heavier rain days" pattern is what climate science expects under warming, but none of these differences is statistically significant (all p > 0.09), so they should be treated as *indications* that need a longer record.
