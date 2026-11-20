@@ -41,7 +41,7 @@ tests/test_stats.py            checks of the statistics against worked examples
 You need Python 3.9 or newer.
 
 ```bash
-git clone https://github.com/Secure14X/climate-flood-research.git
+git clone https://github.com/GeoAlbertX/climate-flood-research.git
 cd climate-flood-research
 pip install -r requirements.txt
 python tests/test_stats.py
@@ -51,7 +51,7 @@ python run_all.py
 It also runs in Google Colab:
 
 ```python
-!git clone https://github.com/Secure14X/climate-flood-research.git
+!git clone https://github.com/GeoAlbertX/climate-flood-research.git
 %cd climate-flood-research
 !pip install -q -r requirements.txt
 !python run_all.py
