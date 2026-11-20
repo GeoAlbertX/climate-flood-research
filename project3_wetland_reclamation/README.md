@@ -6,6 +6,8 @@ Atta Albert · Research in progress · Google Earth Engine, Landsat, Sentinel-2,
 
 **Status:** literature review and methods complete; satellite mapping under way. No results are reported yet.
 
+This study is also published as a standalone repository, where new maps and results will be added: [GeoAlbertX/lagos-wetland-reclamation](https://github.com/GeoAlbertX/lagos-wetland-reclamation).
+
 ---
 
 ## Why this study
