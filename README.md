@@ -1,13 +1,14 @@
 # Rainfall, urban growth and flood risk in Lagos, Nigeria (2005–2024)
 
-Flooding in Lagos seems to get worse every rainy season, and people usually blame either "heavier rain" or "too much building". I wanted to see what the data actually says. This repository contains two connected studies that look at the question from both sides:
+Flooding in Lagos seems to get worse every rainy season, and people usually blame either "heavier rain" or "too much building". I wanted to see what the data actually says. This repository contains three connected studies that look at the question from different sides:
 
 | | Study | Question | Main methods |
 |---|---|---|---|
 | 1 | [Is the rain changing?](project1_rainfall_trends/README.md) | Has rainfall amount, intensity, seasonality or the size of extreme storms changed between 2005 and 2024? | ETCCDI climate indices, Mann-Kendall, Sen's slope, Pettitt test, Welch and Mann-Whitney tests, Gumbel extreme-value analysis |
 | 2 | [Concrete, climate and floods](project2_urban_flood_risk/README.md) | How much of the flood risk comes from urban growth rather than rainfall, and which drainage strategy reduces it most? | SCS Curve Number runoff model, GHSL built-up area, Poisson regression, counterfactual attribution, SuDS scenarios, sensitivity analysis |
+| 3 | [Lost wetlands and flood storage](project3_wetland_reclamation/README.md) *(in progress)* | How much wetland, mangrove and lagoon has Lagos reclaimed since 1986, how much flood storage did that remove, and what could remain by 2050? | Random Forest land-cover mapping in Google Earth Engine, accuracy and area estimation, change detection, DEM-based storage volume, land-change modelling |
 
-The first study describes the hazard (the rain). The second turns that rain into runoff and flooding for an urban catchment and tests possible solutions.
+The first study describes the hazard (the rain). The second turns that rain into runoff and flooding for an urban catchment and tests possible solutions. The third looks at where the city's growth came from: the wetlands, mangroves and lagoon edges that have been filled in, and the flood storage lost with them.
 
 ## Main findings
 
@@ -31,6 +32,7 @@ run_all.py                     runs both studies
 src/                           shared code (data download, indices, statistics, hydrology, plots)
 project1_rainfall_trends/      report, analysis script and results for study 1
 project2_urban_flood_risk/     report, analysis script and results for study 2
+project3_wetland_reclamation/   research design, literature review and Earth Engine script for study 3
 tools/gee_impervious_ghsl.js   Earth Engine script for built-up area
 data/                          rainfall data and a template for recorded flood events
 tests/test_stats.py            checks of the statistics against worked examples
