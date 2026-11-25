@@ -1,0 +1,13 @@
+month,mean_mm,sen_slope_mm_per_yr,mk_Z,mk_p,trend
+Jan,19.1266,0.0,0.0506,0.9596,no significant trend
+Feb,28.8696,0.1096,0.5765,0.5643,no significant trend
+Mar,66.6854,0.1795,0.4956,0.6202,no significant trend
+Apr,129.4352,-0.3428,-0.7788,0.4361,no significant trend
+May,244.8805,-0.1749,-0.1315,0.8954,no significant trend
+Jun,384.4587,-0.0918,-0.091,0.9275,no significant trend
+Jul,223.1841,0.5495,0.5765,0.5643,no significant trend
+Aug,99.8553,0.5389,0.7788,0.4361,no significant trend
+Sep,253.199,1.3246,0.8193,0.4126,no significant trend
+Oct,214.7664,1.4496,1.9116,0.0559,no significant trend
+Nov,57.8187,1.2697,4.0558,0.0,significant increase
+Dec,10.5944,0.0324,0.446,0.6556,no significant trend

@@ -12,7 +12,7 @@ The first study describes the hazard (the rain). The second turns that rain into
 
 ## Main findings
 
-- **Rainfall.** Annual rainfall averaged about 1,590 mm with no statistically significant trend in any of the 14 indices. The extremes are moving upwards, though: the wettest day of the year was about 25 % higher in 2015–2024 than in 2005–2014. Under the Gumbel model, the storm that was a 1-in-10-year event in the first decade behaves more like a 1-in-4-year event in the second. With only 20 years of data these changes can't yet be confirmed statistically.
+- **Rainfall.** Over 2005–2024, annual rainfall averaged about 1,590 mm with no statistically significant trend in any of the 14 indices, though the heaviest days pointed upwards. A longer check over 1981–2024 with three datasets (ERA5, NASA POWER and the gauge-based CHIRPS) found no trend that all three agree on, either in total rainfall or in the wettest day, so the apparent rise in extremes is unconfirmed. See the [long-record check](project1_rainfall_trends/LONG_RECORD_CHECK.md).
 - **Flood risk.** Satellite measurements (GHSL) show two very different Lagoses. Central Lagos was already 57 % built-up in 2005 and has barely changed, so there rainfall explains almost all of the recent change in modelled flooding. In the fast-growing Lekki–Ajah corridor, built-up land rose from 16 % to 26 %, and under the same rain the share that runs off rose by 32 % (p = 0.048), entirely because of new development. In both areas, combining green infrastructure with drain upgrades cut modelled flood volume the most (49–60 %). See the [catchment comparison](project2_urban_flood_risk/CATCHMENT_COMPARISON.md).
 - Full numbers, tables and figures are in each study's `results/RESULTS.md`.
 

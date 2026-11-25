@@ -284,7 +284,7 @@ These conclusions are based on NASA POWER daily rainfall for central Lagos, 2005
 4. **Recommendations:**
    * Review Lagos drainage design rainfall (IDF curves) with recent data rather than older records, and consider a climate-change uplift factor for extremes.
    * Strengthen rain-gauge monitoring (NiMet) and validate these satellite/reanalysis results against gauges, which capture point extremes better.
-   * Extend the record (e.g. ERA5 back to 1980) and apply a non-stationary GEV model to confirm or reject the apparent rise in extremes.
+   * Extend the record (e.g. ERA5 back to 1980) and apply a non-stationary GEV model to confirm or reject the apparent rise in extremes. *Update, November 2026:* done for 1981–2024 with three datasets (ERA5, NASA POWER, CHIRPS). They disagree: none shows a consistent trend in total rainfall or in the wettest day, and the gauge-based CHIRPS record does not support the rise in extremes suggested by the 2005–2024 data. See [LONG_RECORD_CHECK.md](LONG_RECORD_CHECK.md).
 
 ## 10. How to reproduce
 

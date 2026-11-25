@@ -1,0 +1,15 @@
+index,mean,mk_Z,mk_p,kendall_tau,mk_trend,sen_slope_per_yr,sen_ci_low,sen_ci_high,sen_change_over_period,ols_slope_per_yr,ols_r2,ols_p,lag1_r,autocorrelated,sen_percent_change,description,unit
+ANNUAL,1732.874,1.507,0.1318,0.1586,no significant trend,4.4718,-1.2834,11.0428,192.2877,4.3409,0.0567,0.1195,-0.037,False,11.0965,Annual rainfall,mm
+PRCPTOT,1732.1897,1.5677,0.1169,0.1649,no significant trend,4.4757,-1.2567,11.044,192.4572,4.3394,0.0566,0.12,-0.0362,False,11.1106,Wet-day rainfall total,mm
+WETDAYS,114.3182,0.648,0.517,0.0687,no significant trend,0.1583,-0.32,0.5625,6.8083,-0.0596,0.002,0.7753,0.0741,False,5.9556,Number of wet days,days
+SDII,15.2881,1.2238,0.221,0.129,no significant trend,0.0319,-0.0159,0.073,1.372,0.034,0.0596,0.1103,0.2408,False,8.9743,Rain per wet day (intensity),mm/day
+Rx1day,76.5884,-0.0506,0.9597,-0.0063,no significant trend,-0.0139,-0.5105,0.3858,-0.5972,-0.1237,0.0068,0.5934,-0.1553,False,-0.7798,Wettest day of the year,mm
+Rx5day,162.6608,-1.4666,0.1425,-0.1543,no significant trend,-0.6714,-1.5406,0.2377,-28.8703,-0.8227,0.0681,0.0872,-0.0334,False,-17.7488,Wettest 5-day spell,mm
+R10mm,61.6591,1.8136,0.0697,0.1903,no significant trend,0.2247,0.0,0.4545,9.6641,0.2118,0.0892,0.0489,0.026,False,15.6735,Heavy-rain days (>=10 mm),days
+R20mm,28.2273,2.7212,0.0065,0.2844,significant increase,0.1929,0.0513,0.3333,8.2959,0.1887,0.1637,0.0064,0.0467,False,29.3897,Very heavy days (>=20 mm),days
+R50mm,3.2273,-0.3802,0.7038,-0.0402,no significant trend,0.0,-0.0526,0.0323,0.0,-0.0093,0.0039,0.6874,-0.0464,False,0.0,Extreme days (>=50 mm),days
+R95p,326.6833,0.1922,0.8476,0.0211,no significant trend,0.3735,-3.2763,4.1113,16.0586,0.2258,0.0004,0.8947,-0.1307,False,4.9157,Rain from extreme days (>P95),mm
+R95pTOT,18.6071,-0.2933,0.7693,-0.0317,no significant trend,-0.0471,-0.2367,0.1567,-2.0266,-0.034,0.0036,0.6998,-0.1096,False,-10.8917,Share of rain from extreme days,%
+CDD,30.9773,0.7904,0.4293,0.0835,no significant trend,0.0769,-0.125,0.2727,3.3077,0.0419,0.0042,0.6769,-0.2007,False,10.6778,Longest dry spell,days
+CWD,8.1818,-0.8817,0.378,-0.092,no significant trend,0.0,-0.1053,0.0,0.0,-0.1292,0.1081,0.0293,0.0888,False,0.0,Longest wet spell,days
+PCI,15.0001,-2.1543,0.0312,-0.2262,significant decrease,-0.0392,-0.0756,-0.003,-1.6844,-0.0462,0.0935,0.0435,0.1364,False,-11.2295,Precipitation Concentration Index,-

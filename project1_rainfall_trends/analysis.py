@@ -30,10 +30,10 @@ def fmt_p(p):
     return "<0.001" if p < 0.001 else f"{p:.3f}"
 
 
-def run(demo=False, cfg=None):
+def run(demo=False, cfg=None, out=None):
     cfg = cfg or load_config()
     alpha = cfg["statistics"]["significance_level"]
-    out = HERE / ("results_demo" if demo else "results")
+    out = Path(out) if out else HERE / ("results_demo" if demo else "results")
     (out / "figures").mkdir(parents=True, exist_ok=True)
     (out / "tables").mkdir(parents=True, exist_ok=True)
 
@@ -291,4 +291,19 @@ def run(demo=False, cfg=None):
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--demo", action="store_true", help="use synthetic data (offline test only)")
-    run(demo=ap.parse_args().demo)
+    ap.add_argument("--source", choices=["nasa_power", "open_meteo", "csv"], help="override data.source")
+    ap.add_argument("--start", type=int, help="override period.start_year")
+    ap.add_argument("--end", type=int, help="override period.end_year")
+    ap.add_argument("--csv", help="path (from the repository root) to your own daily CSV: date, precip_mm")
+    ap.add_argument("--out", help="output folder name inside project1_rainfall_trends/ (default: results)")
+    a = ap.parse_args()
+    cfg = load_config()
+    if a.source:
+        cfg["data"]["source"] = a.source
+    if a.csv:
+        cfg["data"]["source"], cfg["data"]["csv_path"] = "csv", a.csv
+    if a.start:
+        cfg["period"]["start_year"] = a.start
+    if a.end:
+        cfg["period"]["end_year"] = a.end
+    run(demo=a.demo, cfg=cfg, out=HERE / a.out if a.out else None)
