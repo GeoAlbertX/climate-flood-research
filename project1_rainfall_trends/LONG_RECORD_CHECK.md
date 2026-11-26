@@ -29,6 +29,10 @@ python project1_rainfall_trends/analysis.py --csv data/raw/chirps_lagos_daily_19
 | Days with ≥ 20 mm | +0.07 days/yr, p = 0.13 (no trend) | 0.00 days/yr, p = 0.64 (no trend) | +0.19 days/yr, p = 0.007 (**up**) |
 | 1-in-10-year storm of the first half, in the second half | 1-in-8.4 years | 1-in-3.1 years | 1-in-27 years |
 
+![Annual rainfall and wettest day, three datasets, 1981–2024](results_chirps_1981_2024/figures/three_datasets.png)
+
+*Drawn with [`compare_datasets.py`](compare_datasets.py). Thin lines are yearly values, thick lines are Sen's slopes.*
+
 **How well do the datasets agree year by year?** (correlation of yearly values)
 
 | | ERA5–POWER | ERA5–CHIRPS | POWER–CHIRPS |
